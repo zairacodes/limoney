@@ -1,12 +1,24 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native'
 import { AccountContext } from '../context/AccountContext'
 
 export default function Investment() {
   const { accBalance, setAccBalance } = useContext(AccountContext)
-  const [investment, setInvestment] = useState(0)
+  const [investment, setInvestment] = useState('')
   const [investedAmount, setInvestedAmount] = useState(0)
   const [isInvesting, setIsInvesting] = useState(false)
+  const [startTime, setStartTime] = useState(null)
+
+  useEffect(() => {
+    let timer
+    if (isInvesting) {
+      setStartTime(new Date())
+      timer = setInterval(() => {
+        setInvestedAmount((prevAmount) => prevAmount * 1.02)
+      }, 60000)
+    }
+    return () => clearInterval(timer)
+  }, [isInvesting])
 
   const handleInvest = () => {
     if (investment > 0 && investment <= accBalance) {
@@ -22,17 +34,43 @@ export default function Investment() {
     setIsInvesting(false)
   }
 
+  const calculateTimeElapsed = () => {
+    if (startTime) {
+      const now = new Date()
+      const elapsed = Math.floor((now - startTime) / 60000)
+      return elapsed
+    }
+    return 0
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.label}>Investment (2% every 1 min)</Text>
       <TextInput
         style={styles.input}
+        placeholder="Enter amount"
         keyboardType="numeric"
         onChangeText={(value) => setInvestment(Number(value))}
         value={investment.toString()}
       />
       <Button title="Invest" onPress={handleInvest} disabled={isInvesting} />
-      {isInvesting && <Button title="Redeem" onPress={handleRedeem} />}
+      {isInvesting && (
+        <>
+          <Button title="Redeem" onPress={handleRedeem} />
+          <View style={styles.infoContainer}>
+            <Text style={styles.info}>Initial Investment: £{investment}</Text>
+            <Text style={styles.info}>
+              Current Value: £{investedAmount.toFixed(2)}
+            </Text>
+            <Text style={styles.info}>
+              Interest Earned: £{(investedAmount - investment).toFixed(2)}
+            </Text>
+            <Text style={styles.info}>
+              Time Elapsed: {calculateTimeElapsed()} min
+            </Text>
+          </View>
+        </>
+      )}
     </View>
   )
 }
@@ -49,5 +87,16 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
     marginBottom: 10,
+  },
+  infoContainer: {
+    marginTop: 20,
+    padding: 10,
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 5,
+  },
+  info: {
+    fontSize: 16,
+    marginBottom: 5,
   },
 })
