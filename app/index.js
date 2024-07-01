@@ -1,16 +1,17 @@
 import { Text, View } from 'react-native'
 import Header from './components/Header'
-import { AccountContext, AccountProvider } from './context/AccountContext'
+import { AccountProvider } from './context/AccountContext'
+import { Provider as PaperProvider } from 'react-native-paper'
 
 export default function Page() {
   return (
     <AccountProvider>
-      <View>
-        <View>
-          <Header />
-          <Text>Hello World</Text>
-        </View>
-      </View>
+      <PaperProvider>
+          <View>
+            <Header />
+            <Text>Hello World</Text>
+          </View>
+      </PaperProvider>
     </AccountProvider>
   )
 }
