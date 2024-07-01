@@ -1,13 +1,14 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 import Header from '../components/Header.js'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 const bank = () => {
   return (
-    <View>
+    <SafeAreaView>
       <Header />
       <Text>Bank and Investment page</Text>
-    </View>
+    </SafeAreaView>
   )
 }
 

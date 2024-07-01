@@ -1,6 +1,7 @@
 import { Stack } from 'expo-router'
 import React from 'react'
 import { AccountProvider } from './context/AccountContext.js'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 export default function RootLayout() {
   return (
