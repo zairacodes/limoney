@@ -1,10 +1,18 @@
 import React, { useState, useContext, useEffect } from 'react'
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native'
+import {
+  View,
+  Text,
+  TextInput,
+  Button,
+  StyleSheet,
+  Keyboard,
+} from 'react-native'
 import { AccountContext } from '../context/AccountContext'
 
 export default function Investment() {
   const { accBalance, setAccBalance } = useContext(AccountContext)
   const [investment, setInvestment] = useState('')
+  const [initialInvestment, setInitialInvestment] = useState(0)
   const [investedAmount, setInvestedAmount] = useState(0)
   const [isInvesting, setIsInvesting] = useState(false)
   const [startTime, setStartTime] = useState(null)
@@ -21,10 +29,14 @@ export default function Investment() {
   }, [isInvesting])
 
   const handleInvest = () => {
-    if (investment > 0 && investment <= accBalance) {
-      setAccBalance(accBalance - investment)
-      setInvestedAmount(investment)
+    const investmentValue = Number(investment)
+    if (investmentValue > 0 && investmentValue <= accBalance) {
+      setAccBalance(accBalance - investmentValue)
+      setInvestedAmount(investmentValue)
+      setInitialInvestment(investmentValue)
       setIsInvesting(true)
+      setInvestment('')
+      Keyboard.dismiss()
     }
   }
 
@@ -50,20 +62,23 @@ export default function Investment() {
         style={styles.input}
         placeholder="Enter amount"
         keyboardType="numeric"
-        onChangeText={(value) => setInvestment(Number(value))}
-        value={investment.toString()}
+        onChangeText={(value) => setInvestment(value)}
+        value={investment}
       />
       <Button title="Invest" onPress={handleInvest} disabled={isInvesting} />
       {isInvesting && (
         <>
           <Button title="Redeem" onPress={handleRedeem} />
           <View style={styles.infoContainer}>
-            <Text style={styles.info}>Initial Investment: £{investment}</Text>
+            <Text style={styles.info}>
+              Initial Investment: £{initialInvestment}
+            </Text>
             <Text style={styles.info}>
               Current Value: £{investedAmount.toFixed(2)}
             </Text>
             <Text style={styles.info}>
-              Interest Earned: £{(investedAmount - investment).toFixed(2)}
+              Interest Earned: £
+              {(investedAmount - initialInvestment).toFixed(2)}
             </Text>
             <Text style={styles.info}>
               Time Elapsed: {calculateTimeElapsed()} min
