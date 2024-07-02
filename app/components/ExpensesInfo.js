@@ -28,21 +28,21 @@ export default function ExpensesInfo({
     { id: "12", month: "December", status: "pending" },
   ];
 
-  useEffect(() => {
-    const increaseExpenses = () => {
-      const rentIncrease = 100;
-      const utilitiesIncrease = 20;
-      const balanceIncrease = 10;
+  // useEffect(() => {
+  //   const increaseExpenses = () => {
+  //     const rentIncrease = 100;
+  //     const utilitiesIncrease = 20;
+  //     const balanceIncrease = 10;
 
-      setRent((prevRent) => prevRent + rentIncrease);
-      setUtilities((prevUtilities) => prevUtilities + utilitiesIncrease);
-      setAccBalance((prevBalance) => prevBalance + balanceIncrease);
-    };
+  //     setRent((prevRent) => prevRent + rentIncrease);
+  //     setUtilities((prevUtilities) => prevUtilities + utilitiesIncrease);
+  //     setAccBalance((prevBalance) => prevBalance + balanceIncrease);
+  //   };
 
-    const intervalId = setInterval(increaseExpenses, 5000);
+  //   const intervalId = setInterval(increaseExpenses, 5000);
 
-    return () => clearInterval(intervalId);
-  }, [setRent, setUtilities, setAccBalance]);
+  //   return () => clearInterval(intervalId);
+  // }, [setRent, setUtilities, setAccBalance]);
 
   const payRent = () => {
     if (accBalance >= rent) {
