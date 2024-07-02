@@ -1,16 +1,19 @@
 import { View, Text, StyleSheet, ScrollView } from "react-native";
-import React from "react";
+import React, { useContext } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { colours } from "../utils/colours";
+import { UserContext } from "../context/UserContext";
 
 const information = () => {
+  const {user} = useContext(UserContext)
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
         <View style={styles.box}>
           <Text style={styles.heading}>How To Play</Text>
           <Text style={styles.body}>
-            Congratulations! You are the proud new owner of the Limoney lemonade stand!
+            Congratulations {user.username}! You are the proud new owner of the Limoney lemonade stand!
           </Text>
           <Text style={styles.body}>
             Your aim is to earn £100,000 by selling, upgrading and investing.
