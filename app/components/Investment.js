@@ -31,7 +31,7 @@ export default function Investment() {
   const handleInvest = () => {
     const investmentValue = Number(investment)
     if (investmentValue > 0 && investmentValue <= accBalance) {
-      setAccBalance(accBalance - investmentValue)
+      setAccBalance((accBalance - investmentValue).toFixed(2))
       setInvestedAmount(investmentValue)
       setInitialInvestment(investmentValue)
       setIsInvesting(true)
@@ -41,7 +41,7 @@ export default function Investment() {
   }
 
   const handleRedeem = () => {
-    setAccBalance(accBalance + investedAmount)
+    setAccBalance((Number(accBalance) + investedAmount).toFixed(2))
     setInvestedAmount(0)
     setIsInvesting(false)
   }
