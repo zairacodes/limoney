@@ -42,7 +42,7 @@ export default function Investment() {
   };
 
   const handleRedeem = () => {
-    setAccBalance(accBalance + investedAmount);
+    setAccBalance((accBalance + investedAmount).toFixed(2));
     setInvestedAmount(0);
     setIsInvesting(false);
   };
