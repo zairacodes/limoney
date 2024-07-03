@@ -3,11 +3,12 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "../components/Header.js";
 import StockList from "../components/Operation/StockList.js";
 import LemonadeRecipe from "../components/Operation/LemonadeRecipe.js";
-import { ScrollView } from "react-native";
+import { StyleSheet, ScrollView } from "react-native";
+import { colours } from "../utils/colours";
 
 const operation = () => {
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.container}>
       <ScrollView>
         <Header />
         <StockList />
@@ -16,5 +17,12 @@ const operation = () => {
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: colours.yellow,
+  },
+});
 
 export default operation;
