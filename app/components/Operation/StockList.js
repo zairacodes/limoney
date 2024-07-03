@@ -1,24 +1,29 @@
-import { View, Text, StyleSheet } from "react-native";
-import React, { useContext, useEffect } from "react";
+import { View, Text, StyleSheet, Image } from "react-native";
+import React, { useContext, useEffect, useState } from "react";
 import { Button } from "react-native-paper";
 import { UserContext } from "../../context/UserContext";
 
 const StockList = () => {
   const { user, setUser } = useContext(UserContext);
+  const [selling, setSelling] = useState(false);
 
   useEffect(() => {
-    const sellLemonade = setInterval(() => {
-      if (user.lemonadeInStock >= 1) {
+    let sellLemonade;
+
+    if (user.lemonadeInStock >= 1) {
+      sellLemonade = setInterval(() => {
         setUser((prevUser) => ({
           ...prevUser,
           lemonadeInStock: prevUser.lemonadeInStock - 1,
           accountBalance: prevUser.accountBalance + 20,
         }));
-      }
-    }, 5000); // lemonade sold every 5 seconds for testing
+      }, 5000); // lemonade sold every 5 seconds for testing
+      setSelling(true);
+    }
 
     return () => {
       clearInterval(sellLemonade);
+      setSelling(false);
     };
   }, [user.lemonadeInStock]);
 
@@ -28,6 +33,15 @@ const StockList = () => {
         <Text style={styles.titleText}>
           Lemonade in Stock: {user.lemonadeInStock}
         </Text>
+        {selling && (
+          <View style={styles.loadingContainer}>
+            <Text style={styles.loadingText}>Selling...</Text>
+            <Image
+              source={require("../../utils/LoadingGIF.gif")}
+              style={styles.loadingGif}
+            />
+          </View>
+        )}
       </View>
       <View style={styles.container}>
         <Text style={styles.titleText}>Stock List:</Text>
@@ -104,6 +118,7 @@ const StockList = () => {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     margin: 10,
     padding: 20,
     borderWidth: 1,
@@ -142,6 +157,18 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     borderWidth: 1,
     backgroundColor: "darkorange", // to be changed according to colours.js
+  },
+  loadingContainer: {
+    alignItems: "center",
+    marginTop: 5,
+  },
+  loadingText: {
+    textAlign: "center",
+    fontSize: 16,
+  },
+  loadingGif: {
+    width: 60,
+    height: 60,
   },
 });
 
