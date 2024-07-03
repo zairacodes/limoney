@@ -5,8 +5,10 @@ import { UserContext } from '../context/UserContext'
 import { ProgressBar, MD3Colors } from 'react-native-paper'
 
 export default function Header() {
+  
   const { user } = useContext(UserContext)
   const formattedAccBalance = Math.round(user.accountBalance)
+  
   return (
     <View style={styles.header}>
       <Text style={styles.text}>Account Balance: £{formattedAccBalance}</Text>

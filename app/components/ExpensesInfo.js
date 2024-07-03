@@ -11,7 +11,71 @@ export default function ExpensesInfo({
 }) {
   const { accBalance, setAccBalance } = useContext(AccountContext);
   const [transactionHistory, setTransactionHistory] = useState([]);
-  //const [businessBalance, setBusinessBalance] = useState(3000);
+
+  const randomEvents = [
+    {
+      type: "Bad Weather",
+      message: "A sudden thunderstorm hits, forcing you to close early.",
+      cost: 50,
+    },
+    {
+      type: "Supply Shortage",
+      message: "You ran out of lemons and had to buy more at a higher price.",
+      cost: 30,
+    },
+    {
+      type: "Equipment Failure",
+      message: "Your juicer broke down and needs immediate repair.",
+      cost: 75,
+    },
+    {
+      type: "Health Inspection",
+      message:
+        "A health inspector visited and required you to make improvements.",
+      cost: 40,
+    },
+    {
+      type: "Customer Complaint",
+      message:
+        "A customer complained about the lemonade, offering a free drink as compensation.",
+      cost: 5,
+    },
+    {
+      type: "Marketing Boost",
+      message: "You decided to invest in flyers to boost sales.",
+      cost: 20,
+    },
+    {
+      type: "Stolen Goods",
+      message: "Someone stole a batch of your lemons.",
+      cost: 25,
+    },
+    {
+      type: "Price Increase",
+      message: "The price of sugar increased unexpectedly.",
+      cost: 10,
+    },
+    {
+      type: "New Competition",
+      message: "A new lemonade stand opened nearby, reducing your sales.",
+      cost: 20,
+    },
+    {
+      type: "Regulatory Fee",
+      message: "You had to pay a small regulatory fee.",
+      cost: 15,
+    },
+    {
+      type: "Community Support",
+      message: "The community showed support and bought more lemonade!",
+      revenue: 30,
+    },
+    {
+      type: "Staff Illness",
+      message: "One of your helpers fell sick, and you had to manage alone.",
+      cost: 20,
+    },
+  ];
 
   const months = [
     { id: "1", month: "January", status: "paid" },
@@ -28,21 +92,6 @@ export default function ExpensesInfo({
     { id: "12", month: "December", status: "pending" },
   ];
 
-  useEffect(() => {
-    const increaseExpenses = () => {
-      const rentIncrease = 100;
-      const utilitiesIncrease = 20;
-      const balanceIncrease = 10;
-
-      setRent((prevRent) => prevRent + rentIncrease);
-      setUtilities((prevUtilities) => prevUtilities + utilitiesIncrease);
-      setAccBalance((prevBalance) => prevBalance + balanceIncrease);
-    };
-
-    const intervalId = setInterval(increaseExpenses, 5000);
-
-    return () => clearInterval(intervalId);
-  }, [setRent, setUtilities, setAccBalance]);
 
   const payRent = () => {
     if (accBalance >= rent) {
@@ -73,12 +122,44 @@ export default function ExpensesInfo({
   const logTransaction = (description, amount) => {
     const date = new Date().toLocaleString();
     const newTransaction = { description, amount, date };
-    setTransactionHistory((prevHistory) => [...prevHistory, newTransaction]);
+    setTransactionHistory((prevHistory) => [newTransaction, ...prevHistory]);
   };
+
+  const triggerRandomEvent = () => {
+    const randomEvent =
+      randomEvents[Math.floor(Math.random() * randomEvents.length)];
+
+    if (randomEvent.revenue) {
+      setAccBalance((prevBalance) => prevBalance + randomEvent.revenue);
+      logTransaction(randomEvent.type, +randomEvent.revenue);
+      Alert.alert(
+        randomEvent.type,
+        `${randomEvent.message} Revenue: £${randomEvent.revenue}`
+      );
+    } else {
+      if (accBalance >= randomEvent.cost) {
+        setAccBalance((prevBalance) => prevBalance - randomEvent.cost);
+        logTransaction(randomEvent.type, -randomEvent.cost);
+        Alert.alert(
+          randomEvent.type,
+          `${randomEvent.message} Cost: £${randomEvent.cost}`
+        );
+      } else {
+        Alert.alert(
+          randomEvent.type,
+          `${randomEvent.message} However, you do not have enough balance to cover the cost of £${randomEvent.cost}.`
+        );
+      }
+    }
+  };
+
+  useEffect(() => {
+    const interval = setInterval(triggerRandomEvent, 15000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <View style={styles.container}>
-      {/* <Text style={styles.bText}>Business Balance: £{businessBalance}</Text> */}
       <View style={styles.rentContainer}>
         <Text style={styles.text}>Rent: {rent}</Text>
         <Button title="Pay The Rent" onPress={payRent} />
@@ -115,7 +196,7 @@ export default function ExpensesInfo({
         renderItem={({ item }) => (
           <View>
             <Text>
-              {item.date} - {item.description}: ${item.amount}
+              {item.date} - {item.description}: £{item.amount}
             </Text>
           </View>
         )}
@@ -159,9 +240,4 @@ const styles = StyleSheet.create({
   pending: {
     color: "red",
   },
-  // bText: {
-  //   color: "green",
-  //   paddingBottom: 20,
-  //   fontSize: 16,
-  // },
 });

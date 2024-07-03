@@ -19,7 +19,7 @@ export default function Tax({ setTransactionHistory, transactionHistory }) {
     };
 
     const handleBalanceIncrease = () => {
-      const balanceIncrease = 50;
+      const balanceIncrease = 0;
       const newTax = calculateTax(balanceIncrease);
       setTax((prevTax) => prevTax + newTax);
     };
