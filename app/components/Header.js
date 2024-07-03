@@ -1,12 +1,14 @@
-import { useContext } from "react";
-import * as React from "react";
-import { View, Text, StyleSheet } from "react-native";
-import { AccountContext } from "../context/AccountContext";
-import { ProgressBar, MD3Colors } from "react-native-paper";
+import { useContext } from 'react'
+import * as React from 'react'
+import { View, Text, StyleSheet } from 'react-native'
+import { UserContext } from '../context/UserContext'
+import { ProgressBar, MD3Colors } from 'react-native-paper'
 
 export default function Header() {
-  const { accBalance } = useContext(AccountContext);
-  const formattedAccBalance = Math.round(accBalance);
+  
+  const { user } = useContext(UserContext)
+  const formattedAccBalance = Math.round(user.accountBalance)
+  
   return (
     <View style={styles.header}>
       <Text style={styles.text}>Account Balance: £{formattedAccBalance}</Text>
@@ -16,7 +18,7 @@ export default function Header() {
         color={MD3Colors.error50}
       />
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -24,10 +26,10 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   text: {
-    textAlign: "center",
+    textAlign: 'center',
     fontSize: 20,
   },
   progressBar: {
     marginTop: 12,
   },
-});
+})

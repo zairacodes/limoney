@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect } from 'react'
 import {
   View,
   Text,
@@ -6,97 +6,101 @@ import {
   Button,
   StyleSheet,
   Keyboard,
-  TouchableWithoutFeedback,
-} from "react-native";
-import { AccountContext } from "../context/AccountContext";
+} from 'react-native'
+import { UserContext } from '../context/UserContext'
 
 export default function Investment() {
-  const { accBalance, setAccBalance } = useContext(AccountContext);
-  const [investment, setInvestment] = useState("");
-  const [initialInvestment, setInitialInvestment] = useState(0);
-  const [investedAmount, setInvestedAmount] = useState(0);
-  const [isInvesting, setIsInvesting] = useState(false);
-  const [startTime, setStartTime] = useState(null);
+  const { user, setUser } = useContext(UserContext)
+  const [investment, setInvestment] = useState('')
+  const [initialInvestment, setInitialInvestment] = useState(0)
+  const [investedAmount, setInvestedAmount] = useState(0)
+  const [isInvesting, setIsInvesting] = useState(false)
+  const [startTime, setStartTime] = useState(null)
 
   useEffect(() => {
-    let timer;
+    let timer
     if (isInvesting) {
-      setStartTime(new Date());
+      setStartTime(new Date())
       timer = setInterval(() => {
-        setInvestedAmount((prevAmount) => prevAmount * 1.02);
-      }, 60000);
+        setInvestedAmount((prevAmount) => prevAmount * 1.02)
+      }, 60000)
     }
-    return () => clearInterval(timer);
-  }, [isInvesting]);
+    return () => clearInterval(timer)
+  }, [isInvesting])
 
   const handleInvest = () => {
-    const investmentValue = Number(investment);
-    if (investmentValue > 0 && investmentValue <= accBalance) {
-      setAccBalance(accBalance - investmentValue);
-      setInvestedAmount(investmentValue);
-      setInitialInvestment(investmentValue);
-      setIsInvesting(true);
-      setInvestment("");
-      Keyboard.dismiss();
+    const investmentValue = Number(investment)
+    if (investmentValue > 0 && investmentValue <= user.accountBalance) {
+      setUser((prevUser) => ({
+        ...prevUser,
+        accountBalance: (prevUser.accountBalance - investmentValue).toFixed(2),
+      }))
+      setInvestedAmount(investmentValue)
+      setInitialInvestment(investmentValue)
+      setIsInvesting(true)
+      setInvestment('')
+      Keyboard.dismiss()
     }
-  };
+  }
 
   const handleRedeem = () => {
-    setAccBalance((accBalance + investedAmount).toFixed(2));
-    setInvestedAmount(0);
-    setIsInvesting(false);
-  };
+    setUser((prevUser) => ({
+      ...prevUser,
+      accountBalance: (
+        Number(prevUser.accountBalance) + investedAmount
+      ).toFixed(2),
+    }))
+    setInvestedAmount(0)
+    setIsInvesting(false)
+  }
 
   const calculateTimeElapsed = () => {
     if (startTime) {
-      const now = new Date();
-      const elapsed = Math.floor((now - startTime) / 60000);
-      return elapsed;
+      const now = new Date()
+      const elapsed = Math.floor((now - startTime) / 60000)
+      return elapsed
     }
-    return 0;
-  };
+    return 0
+  }
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View style={styles.container}>
-        <Text style={styles.label}>Investment (2% every 1 min)</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter amount"
-          keyboardType="numeric"
-          onChangeText={(value) => setInvestment(value)}
-          value={investment}
-        />
-        <Button title="Invest" onPress={handleInvest} disabled={isInvesting} />
-        {isInvesting && (
-          <>
-            <Button title="Redeem" onPress={handleRedeem} />
-            <View style={styles.infoContainer}>
-              <Text style={styles.info}>
-                Initial Investment: £{initialInvestment}
-              </Text>
-              <Text style={styles.info}>
-                Current Value: £{investedAmount.toFixed(2)}
-              </Text>
-              <Text style={styles.info}>
-                Interest Earned: £
-                {(investedAmount - initialInvestment).toFixed(2)}
-              </Text>
-              <Text style={styles.info}>
-                Time Elapsed: {calculateTimeElapsed()} min
-              </Text>
-            </View>
-          </>
-        )}
-      </View>
-    </TouchableWithoutFeedback>
-  );
+    <View style={styles.container}>
+      <Text style={styles.label}>Investment (2% every 1 min)</Text>
+      <TextInput
+        style={styles.input}
+        placeholder="Enter amount"
+        keyboardType="numeric"
+        onChangeText={(value) => setInvestment(value)}
+        value={investment}
+      />
+      <Button title="Invest" onPress={handleInvest} disabled={isInvesting} />
+      {isInvesting && (
+        <>
+          <Button title="Redeem" onPress={handleRedeem} />
+          <View style={styles.infoContainer}>
+            <Text style={styles.info}>
+              Initial Investment: £{initialInvestment}
+            </Text>
+            <Text style={styles.info}>
+              Current Value: £{investedAmount.toFixed(2)}
+            </Text>
+            <Text style={styles.info}>
+              Interest Earned: £
+              {(investedAmount - initialInvestment).toFixed(2)}
+            </Text>
+            <Text style={styles.info}>
+              Time Elapsed: {calculateTimeElapsed()} min
+            </Text>
+          </View>
+        </>
+      )}
+    </View>
+  )
 }
 
 const styles = StyleSheet.create({
   container: {
     padding: 20,
-    paddingBottom: "100%",
   },
   label: {
     fontSize: 18,
@@ -111,11 +115,11 @@ const styles = StyleSheet.create({
     marginTop: 20,
     padding: 10,
     borderWidth: 1,
-    borderColor: "#ddd",
+    borderColor: '#ddd',
     borderRadius: 5,
   },
   info: {
     fontSize: 16,
     marginBottom: 5,
   },
-});
+})
