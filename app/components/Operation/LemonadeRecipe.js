@@ -2,6 +2,7 @@ import { View, Text, StyleSheet } from "react-native";
 import React, { useContext } from "react";
 import { Button } from "react-native-paper";
 import { UserContext } from "../../context/UserContext";
+import { colours } from "../../utils/colours";
 
 const LemonadeRecipe = () => {
   const { user, setUser } = useContext(UserContext);
@@ -21,7 +22,7 @@ const LemonadeRecipe = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={styles.box}>
       <Text style={styles.titleText}>Lemonade Recipe:</Text>
       <Text style={styles.ingredientText}>Lemon x 1</Text>
       <Text style={styles.ingredientText}>Water x 4</Text>
@@ -34,25 +35,22 @@ const LemonadeRecipe = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
+  box: {
     display: "flex",
     alignItems: "center",
     margin: 10,
     padding: 20,
     borderWidth: 1,
-    // borderColor: "black", // to be changed according to colours.js
-    // backgroundColor: "beige", // to be changed according to colours.js
+    backgroundColor: colours.paleYellow,
   },
   titleText: {
     textAlign: "center",
     fontSize: 20,
     fontWeight: "bold",
-    // color: "darkorange", // to be changed according to colours.js
   },
   ingredientText: {
     marginTop: "5%",
     fontSize: 18,
-    // color: "darkorange", // to be changed according to colours.js
   },
   button: {
     alignItems: "center",
@@ -60,7 +58,7 @@ const styles = StyleSheet.create({
     marginTop: "5%",
     borderRadius: 50,
     borderWidth: 1,
-    backgroundColor: "darkorange", // to be changed according to colours.js
+    backgroundColor: colours.yellow,
   },
 });
 
