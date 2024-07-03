@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, Button, StyleSheet, Alert } from "react-native";
 import { useContext } from "react";
-import { AccountContext } from "../context/AccountContext";
+import { AccountContext } from "../../context/AccountContext";
 
-export default function Tax({ setTransactionHistory, transactionHistory }) {
+export default function Tax({ setTransactionHistory }) {
   const { accBalance, setAccBalance } = useContext(AccountContext);
   const [tax, setTax] = useState(0);
 
   const logTransaction = (description, amount) => {
     const date = new Date().toLocaleString();
     const newTransaction = { description, amount, date };
-    setTransactionHistory((prevHistory) => [...prevHistory, newTransaction]);
+    setTransactionHistory((prevHistory) => [newTransaction, ...prevHistory]);
   };
 
   useEffect(() => {
