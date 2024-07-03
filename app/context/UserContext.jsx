@@ -13,6 +13,7 @@ export const UserProvider = ({ children }) => {
     lemonCount: 0,
     sugarCount: 0,
     waterCount: 0,
+    lemonadeInStock: 0,
   })
   const [loading, setLoading] = useState(true)
 
@@ -29,6 +30,7 @@ export const UserProvider = ({ children }) => {
             sugarCount: data.sugarCount,
             waterCount: data.waterCount,
             totalProfit: data.totalProfit,
+            lemonadeInStock: data.lemonadeInStock,
           })
           setLoading(false)
         }
