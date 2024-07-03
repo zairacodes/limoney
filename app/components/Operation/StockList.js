@@ -7,28 +7,6 @@ const StockList = () => {
   const { user, setUser } = useContext(UserContext);
 
   useEffect(() => {
-    const makeLemonade = setInterval(() => {
-      if (
-        user.lemonCount >= 1 &&
-        user.waterCount >= 4 &&
-        user.sugarCount >= 3
-      ) {
-        setUser((prevUser) => ({
-          ...prevUser,
-          lemonadeInStock: prevUser.lemonadeInStock + 1,
-          lemonCount: prevUser.lemonCount - 1,
-          waterCount: prevUser.waterCount - 4,
-          sugarCount: prevUser.sugarCount - 3,
-        }));
-      }
-    }, 5000); // lemonade produced every 5 seconds for testing
-
-    return () => {
-      clearInterval(makeLemonade);
-    };
-  }, [user.lemonCount, user.waterCount, user.sugarCount]);
-
-  useEffect(() => {
     const sellLemonade = setInterval(() => {
       if (user.lemonadeInStock >= 1) {
         setUser((prevUser) => ({
@@ -37,7 +15,7 @@ const StockList = () => {
           accountBalance: prevUser.accountBalance + 20,
         }));
       }
-    }, 6000); // lemonade sold every 6 seconds for testing
+    }, 5000); // lemonade sold every 5 seconds for testing
 
     return () => {
       clearInterval(sellLemonade);
