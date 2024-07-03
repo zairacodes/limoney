@@ -2,6 +2,7 @@ import { View, Text, StyleSheet, Image } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { Button } from "react-native-paper";
 import { UserContext } from "../../context/UserContext";
+import { colours } from "../../utils/colours";
 
 const StockList = () => {
   const { user, setUser } = useContext(UserContext);
@@ -29,12 +30,12 @@ const StockList = () => {
 
   return (
     <View>
-      <View style={styles.container}>
+      <View style={styles.box}>
         <Text style={styles.titleText}>
           Lemonade in Stock: {user.lemonadeInStock}
         </Text>
         {selling && (
-          <View style={styles.loadingContainer}>
+          <View style={styles.loadingBox}>
             <Text style={styles.loadingText}>Selling...</Text>
             <Image
               source={require("../../utils/LoadingGIF.gif")}
@@ -43,15 +44,15 @@ const StockList = () => {
           </View>
         )}
       </View>
-      <View style={styles.container}>
+      <View style={styles.box}>
         <Text style={styles.titleText}>Stock List:</Text>
-        <View style={styles.stockListContainer}>
-          <View style={styles.leftContainer}>
-            <Text style={styles.ingredientText}>
+        <View style={styles.stockListBox}>
+          <View style={styles.leftCol}>
+            <Text style={styles.stockItemsText}>
               Lemon: {user.lemonCount} ~ £3
             </Text>
           </View>
-          <View style={styles.rightContainer}>
+          <View style={styles.rightCol}>
             <Button
               style={styles.button}
               disabled={user.accountBalance < 3}
@@ -67,13 +68,13 @@ const StockList = () => {
             </Button>
           </View>
         </View>
-        <View style={styles.stockListContainer}>
-          <View style={styles.leftContainer}>
-            <Text style={styles.ingredientText}>
+        <View style={styles.stockListBox}>
+          <View style={styles.leftCol}>
+            <Text style={styles.stockItemsText}>
               Water: {user.waterCount} ~ £1
             </Text>
           </View>
-          <View style={styles.rightContainer}>
+          <View style={styles.rightCol}>
             <Button
               style={styles.button}
               disabled={user.accountBalance < 1}
@@ -89,13 +90,13 @@ const StockList = () => {
             </Button>
           </View>
         </View>
-        <View style={styles.stockListContainer}>
-          <View style={styles.leftContainer}>
-            <Text style={styles.ingredientText}>
+        <View style={styles.stockListBox}>
+          <View style={styles.leftCol}>
+            <Text style={styles.stockItemsText}>
               Sugar: {user.sugarCount} ~ £1
             </Text>
           </View>
-          <View style={styles.rightContainer}>
+          <View style={styles.rightCol}>
             <Button
               style={styles.button}
               disabled={user.accountBalance < 1}
@@ -117,48 +118,46 @@ const StockList = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
+  box: {
     flex: 1,
     margin: 10,
     padding: 20,
     borderWidth: 1,
-    // backgroundColor: "beige", // to be changed according to colours.js
+    backgroundColor: colours.paleYellow,
   },
   titleText: {
     textAlign: "center",
     fontSize: 20,
     fontWeight: "bold",
-    // color: "darkorange", // to be changed according to colours.js
   },
-  stockListContainer: {
+  stockListBox: {
     padding: 10,
     flexDirection: "row",
   },
-  leftContainer: {
+  leftCol: {
     flex: 1,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "flex-start",
   },
-  rightContainer: {
+  rightCol: {
     flex: 1,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "flex-end",
   },
-  ingredientText: {
+  stockItemsText: {
     marginTop: "5%",
     fontSize: 18,
-    // color: "darkorange", // to be changed according to colours.js
   },
   button: {
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 50,
     borderWidth: 1,
-    backgroundColor: "darkorange", // to be changed according to colours.js
+    backgroundColor: colours.yellow,
   },
-  loadingContainer: {
+  loadingBox: {
     alignItems: "center",
     marginTop: 5,
   },
