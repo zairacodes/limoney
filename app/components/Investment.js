@@ -7,10 +7,10 @@ import {
   StyleSheet,
   Keyboard,
 } from 'react-native'
-import { AccountContext } from '../context/AccountContext'
+import { UserContext } from '../context/UserContext'
 
 export default function Investment() {
-  const { accBalance, setAccBalance } = useContext(AccountContext)
+  const { user, setUser } = useContext(UserContext)
   const [investment, setInvestment] = useState('')
   const [initialInvestment, setInitialInvestment] = useState(0)
   const [investedAmount, setInvestedAmount] = useState(0)
@@ -30,8 +30,11 @@ export default function Investment() {
 
   const handleInvest = () => {
     const investmentValue = Number(investment)
-    if (investmentValue > 0 && investmentValue <= accBalance) {
-      setAccBalance((accBalance - investmentValue).toFixed(2))
+    if (investmentValue > 0 && investmentValue <= user.accountBalance) {
+      setUser((prevUser) => ({
+        ...prevUser,
+        accountBalance: (prevUser.accountBalance - investmentValue).toFixed(2),
+      }))
       setInvestedAmount(investmentValue)
       setInitialInvestment(investmentValue)
       setIsInvesting(true)
@@ -41,7 +44,12 @@ export default function Investment() {
   }
 
   const handleRedeem = () => {
-    setAccBalance((Number(accBalance) + investedAmount).toFixed(2))
+    setUser((prevUser) => ({
+      ...prevUser,
+      accountBalance: (
+        Number(prevUser.accountBalance) + investedAmount
+      ).toFixed(2),
+    }))
     setInvestedAmount(0)
     setIsInvesting(false)
   }
