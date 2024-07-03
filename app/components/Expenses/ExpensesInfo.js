@@ -30,6 +30,38 @@ export default function ExpensesInfo({
     { id: "12", month: "December", status: "pending" },
   ];
 
+  const payRent = () => {
+    if (user.accountBalance >= rent) {
+      setRent(0);
+      setUser((prevUser) => ({
+        ...prevUser,
+        accountBalance: prevUser.accountBalance - rent,
+      }));
+      logTransaction("Rent payment", rent);
+    } else {
+      Alert.alert(
+        "Insufficient funds",
+        "You do not have enough balance to pay the rent."
+      );
+    }
+  };
+
+  const payUtilities = () => {
+    if (user.accountBalance >= utilities) {
+      setUtilities(0);
+      setUser((prevUser) => ({
+        ...prevUser,
+        accountBalance: prevUser.accountBalance - utilities,
+      }));
+      logTransaction("Utilities payment", utilities);
+    } else {
+      Alert.alert(
+        "Insufficient funds",
+        "You do not have enough balance to pay the utilities."
+      );
+    }
+  };
+
   const logTransaction = (description, amount) => {
     const date = new Date().toLocaleString();
     const newTransaction = { description, amount, date };
