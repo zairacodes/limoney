@@ -3,6 +3,7 @@ import * as React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import { UserContext } from '../context/UserContext'
 import { ProgressBar, MD3Colors } from 'react-native-paper'
+import Date from './Date'
 
 export default function Header() {
   
@@ -17,6 +18,7 @@ export default function Header() {
         progress={0.5}
         color={MD3Colors.error50}
       />
+      <Date/>
     </View>
   )
 }
