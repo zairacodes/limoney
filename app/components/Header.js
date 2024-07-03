@@ -6,9 +6,10 @@ import { ProgressBar, MD3Colors } from "react-native-paper";
 
 export default function Header() {
   const { accBalance } = useContext(AccountContext);
+  const formattedAccBalance = Math.round(accBalance);
   return (
     <View style={styles.header}>
-      <Text style={styles.text}>Account Balance: £{accBalance}</Text>
+      <Text style={styles.text}>Account Balance: £{formattedAccBalance}</Text>
       <ProgressBar
         style={styles.progressBar}
         progress={0.5}
