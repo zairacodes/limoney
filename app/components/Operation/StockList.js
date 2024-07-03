@@ -1,62 +1,74 @@
 import { View, Text, StyleSheet } from "react-native";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import { Button } from "react-native-paper";
-import { AccountContext } from "../../context/AccountContext";
+import { UserContext } from "../../context/UserContext";
 
 const StockList = () => {
-  const { accBalance, setAccBalance } = useContext(AccountContext);
-  const [lemonadeInStock, setLemonadeInStock] = useState(3); // 3 lemonades in stock to start with for testing
-  const [lemonStock, setLemonStock] = useState(0);
-  const [waterStock, setWaterStock] = useState(0);
-  const [sugarStock, setSugarStock] = useState(0);
+  const { user, setUser } = useContext(UserContext);
 
   useEffect(() => {
     const makeLemonade = setInterval(() => {
-      if (lemonStock >= 1 && waterStock >= 4 && sugarStock >= 3) {
-        setLemonadeInStock((currLemonadeInStock) => currLemonadeInStock + 1);
-        setLemonStock((currLemonStock) => currLemonStock - 1);
-        setWaterStock((currWaterStock) => currWaterStock - 4);
-        setSugarStock((currSugarStock) => currSugarStock - 3);
+      if (
+        user.lemonCount >= 1 &&
+        user.waterCount >= 4 &&
+        user.sugarCount >= 3
+      ) {
+        setUser((prevUser) => ({
+          ...prevUser,
+          lemonadeInStock: prevUser.lemonadeInStock + 1,
+          lemonCount: prevUser.lemonCount - 1,
+          waterCount: prevUser.waterCount - 4,
+          sugarCount: prevUser.sugarCount - 3,
+        }));
       }
     }, 5000); // lemonade produced every 5 seconds for testing
 
     return () => {
       clearInterval(makeLemonade);
     };
-  }, [lemonStock, waterStock, sugarStock]);
+  }, [user.lemonCount, user.waterCount, user.sugarCount]);
 
   useEffect(() => {
     const sellLemonade = setInterval(() => {
-      if (lemonadeInStock >= 1) {
-        setLemonadeInStock((currLemonadeInStock) => currLemonadeInStock - 1);
-        setAccBalance((currAccBalance) => currAccBalance + 20); // recover £10 total costs and earn £10 profit
+      if (user.lemonadeInStock >= 1) {
+        setUser((prevUser) => ({
+          ...prevUser,
+          lemonadeInStock: prevUser.lemonadeInStock - 1,
+          accountBalance: prevUser.accountBalance + 20,
+        }));
       }
     }, 6000); // lemonade sold every 6 seconds for testing
 
     return () => {
       clearInterval(sellLemonade);
     };
-  }, [lemonadeInStock]);
+  }, [user.lemonadeInStock]);
 
   return (
     <View>
       <View style={styles.container}>
         <Text style={styles.titleText}>
-          Lemonade in Stock: {lemonadeInStock}
+          Lemonade in Stock: {user.lemonadeInStock}
         </Text>
       </View>
       <View style={styles.container}>
         <Text style={styles.titleText}>Stock List:</Text>
         <View style={styles.stockListContainer}>
           <View style={styles.leftContainer}>
-            <Text style={styles.ingredientText}>Lemon: {lemonStock} ~ £3</Text>
+            <Text style={styles.ingredientText}>
+              Lemon: {user.lemonCount} ~ £3
+            </Text>
           </View>
           <View style={styles.rightContainer}>
             <Button
               style={styles.button}
-              disabled={accBalance < 3}
+              disabled={user.accountBalance < 3}
               onPress={() => {
-                setLemonStock(lemonStock + 1), setAccBalance(accBalance - 3);
+                setUser((prevUser) => ({
+                  ...prevUser,
+                  lemonCount: prevUser.lemonCount + 1,
+                  accountBalance: prevUser.accountBalance - 3,
+                }));
               }}
             >
               BUY
@@ -65,14 +77,20 @@ const StockList = () => {
         </View>
         <View style={styles.stockListContainer}>
           <View style={styles.leftContainer}>
-            <Text style={styles.ingredientText}>Water: {waterStock} ~ £1</Text>
+            <Text style={styles.ingredientText}>
+              Water: {user.waterCount} ~ £1
+            </Text>
           </View>
           <View style={styles.rightContainer}>
             <Button
               style={styles.button}
-              disabled={accBalance < 1}
+              disabled={user.accountBalance < 1}
               onPress={() => {
-                setWaterStock(waterStock + 1), setAccBalance(accBalance - 1);
+                setUser((prevUser) => ({
+                  ...prevUser,
+                  waterCount: prevUser.waterCount + 1,
+                  accountBalance: prevUser.accountBalance - 1,
+                }));
               }}
             >
               BUY
@@ -81,14 +99,20 @@ const StockList = () => {
         </View>
         <View style={styles.stockListContainer}>
           <View style={styles.leftContainer}>
-            <Text style={styles.ingredientText}>Sugar: {sugarStock} ~ £1</Text>
+            <Text style={styles.ingredientText}>
+              Sugar: {user.sugarCount} ~ £1
+            </Text>
           </View>
           <View style={styles.rightContainer}>
             <Button
               style={styles.button}
-              disabled={accBalance < 1}
+              disabled={user.accountBalance < 1}
               onPress={() => {
-                setSugarStock(sugarStock + 1), setAccBalance(accBalance - 1);
+                setUser((prevUser) => ({
+                  ...prevUser,
+                  sugarCount: prevUser.sugarCount + 1,
+                  accountBalance: prevUser.accountBalance - 1,
+                }));
               }}
             >
               BUY
