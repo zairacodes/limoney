@@ -92,6 +92,7 @@ export default function ExpensesInfo({
     { id: "12", month: "December", status: "pending" },
   ];
 
+
   const payRent = () => {
     if (accBalance >= rent) {
       setRent(0);
