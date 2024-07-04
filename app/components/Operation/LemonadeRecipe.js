@@ -4,7 +4,7 @@ import { Button } from "react-native-paper";
 import { UserContext } from "../../context/UserContext";
 import { colours } from "../../utils/colours";
 
-const LemonadeRecipe = () => {
+export default function LemonadeRecipe() {
   const { user, setUser } = useContext(UserContext);
 
   const makeLemonade = () => {
@@ -32,7 +32,7 @@ const LemonadeRecipe = () => {
       </Button>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   box: {
@@ -41,6 +41,7 @@ const styles = StyleSheet.create({
     margin: 10,
     padding: 20,
     borderWidth: 1,
+    borderRadius: 20,
     backgroundColor: colours.paleYellow,
   },
   titleText: {
@@ -61,5 +62,3 @@ const styles = StyleSheet.create({
     backgroundColor: colours.yellow,
   },
 });
-
-export default LemonadeRecipe;
