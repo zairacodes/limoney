@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { UserContext } from "../../context/UserContext";
 import { Button } from "react-native-paper";
@@ -6,6 +6,8 @@ import { colours } from "../../utils/colours";
 
 export default function Upgrade() {
   const { user, setUser } = useContext(UserContext);
+  const [buttonOneDisabled, setButtonOneDisabled] = useState(false);
+  const [buttonTwoDisabled, setButtonTwoDisabled] = useState(false);
 
   const handleBundleStock = () => {
     if (user.accountBalance >= 500) {
@@ -16,6 +18,7 @@ export default function Upgrade() {
         waterCount: prevUser.waterCount + 100,
         sugarCount: prevUser.sugarCount + 100,
       }));
+      setButtonOneDisabled(true);
     } else {
       alert("You do not have enough balance to upgrade your stock.");
     }
@@ -28,6 +31,7 @@ export default function Upgrade() {
         accountBalance: prevUser.accountBalance - 1000,
         lemonadeInStock: prevUser.lemonadeInStock + 100,
       }));
+      setButtonTwoDisabled(true);
     } else {
       alert(
         "You do not have enough balance to upgrade your stock of lemonades."
@@ -49,7 +53,7 @@ export default function Upgrade() {
           <View style={styles.rightCol}>
             <Button
               style={styles.button}
-              disabled={user.accountBalance < 500}
+              disabled={buttonOneDisabled || user.accountBalance < 500}
               onPress={handleBundleStock}
             >
               £500
@@ -66,7 +70,7 @@ export default function Upgrade() {
           <View style={styles.rightCol}>
             <Button
               style={styles.button}
-              disabled={user.accountBalance < 1000}
+              disabled={buttonTwoDisabled || user.accountBalance < 1000}
               onPress={handleBundleLemonade}
             >
               £1000
