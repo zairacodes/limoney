@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { View, Text, Button, StyleSheet, Alert } from "react-native";
-import { useContext } from "react";
-import { AccountContext } from "../context/AccountContext";
+import { AccountContext } from "../../context/AccountContext";
+import { UserContext } from "../../context/UserContext";
 
-export default function Tax({ setTransactionHistory, transactionHistory }) {
-  const { accBalance, setAccBalance } = useContext(AccountContext);
+export default function Tax({ setTransactionHistory }) {
+  const { user, setUser } = useContext(UserContext);
   const [tax, setTax] = useState(0);
 
   const logTransaction = (description, amount) => {
     const date = new Date().toLocaleString();
     const newTransaction = { description, amount, date };
-    setTransactionHistory((prevHistory) => [...prevHistory, newTransaction]);
+    setTransactionHistory((prevHistory) => [newTransaction, ...prevHistory]);
   };
 
   useEffect(() => {
@@ -19,19 +19,25 @@ export default function Tax({ setTransactionHistory, transactionHistory }) {
     };
 
     const handleBalanceIncrease = () => {
-      const balanceIncrease = 0;
-      const newTax = calculateTax(balanceIncrease);
-      setTax((prevTax) => prevTax + newTax);
+      if (user.totalProfit > 0) {
+        const newTax = calculateTax(user.totalProfit);
+        setTax((prevTax) => prevTax + newTax);
+      }
     };
 
-    const intervalId = setInterval(handleBalanceIncrease, 5000);
+    const intervalId = setInterval(handleBalanceIncrease, 3000);
 
     return () => clearInterval(intervalId);
-  }, []);
+  }, [user.totalProfit]);
 
   const payTax = () => {
-    if (accBalance >= tax) {
-      setAccBalance(accBalance - tax);
+    if (user.accountBalance >= tax) {
+      const newAccountBalance = user.accountBalance - tax;
+      setUser((prevUser) => ({
+        ...prevUser,
+        accountBalance: newAccountBalance,
+        totalProfit: 0,
+      }));
       setTax(0);
       logTransaction("Tax", tax);
     } else {

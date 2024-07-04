@@ -2,7 +2,7 @@ import { View, Text, StyleSheet } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Header from "../components/Header.js";
-import ExpensesInfo from "../components/ExpensesInfo.js";
+import ExpensesInfo from "../components/Expenses/ExpensesInfo.js";
 
 const expenses = () => {
   const [rent, setRent] = useState(2000);
