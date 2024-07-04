@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import { View, Text, Button, StyleSheet, Alert } from "react-native";
-import { AccountContext } from "../../context/AccountContext";
+
 import { UserContext } from "../../context/UserContext";
 
 export default function Tax({ setTransactionHistory }) {
@@ -14,20 +14,11 @@ export default function Tax({ setTransactionHistory }) {
   };
 
   useEffect(() => {
-    const calculateTax = (balanceIncrease) => {
-      return balanceIncrease * 0.2;
+    const calculateTax = () => {
+      return 10 * 0.2;
     };
 
-    const handleBalanceIncrease = () => {
-      if (user.totalProfit > 0) {
-        const newTax = calculateTax(user.totalProfit);
-        setTax((prevTax) => prevTax + newTax);
-      }
-    };
-
-    const intervalId = setInterval(handleBalanceIncrease, 3000);
-
-    return () => clearInterval(intervalId);
+    setTax(tax + calculateTax());
   }, [user.totalProfit]);
 
   const payTax = () => {
@@ -36,7 +27,6 @@ export default function Tax({ setTransactionHistory }) {
       setUser((prevUser) => ({
         ...prevUser,
         accountBalance: newAccountBalance,
-        totalProfit: 0,
       }));
       setTax(0);
       logTransaction("Tax", tax);

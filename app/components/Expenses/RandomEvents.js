@@ -111,7 +111,7 @@ export default function RandomEvents({ setTransactionHistory }) {
   };
 
   useEffect(() => {
-    const interval = setInterval(triggerRandomEvent, 30000);
+    const interval = setInterval(triggerRandomEvent, 90000);
     return () => clearInterval(interval);
   }, []);
 }
