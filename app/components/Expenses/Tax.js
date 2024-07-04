@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
 import { View, Text, Button, StyleSheet, Alert } from "react-native";
-import { AccountContext } from "../../context/AccountContext";
 import { UserContext } from "../../context/UserContext";
 
 export default function Tax({ setTransactionHistory }) {
