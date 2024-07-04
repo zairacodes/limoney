@@ -8,7 +8,7 @@ import NetInfo from '@react-native-community/netinfo'
 export const UserContext = createContext()
 
 export const UserProvider = ({ children }) => {
-  const [user, setUser] = useState({
+  const initialState = {
     username: 'Blalalala',
     accountBalance: 2000,
     totalProfit: 0,
@@ -16,55 +16,73 @@ export const UserProvider = ({ children }) => {
     sugarCount: 0,
     waterCount: 0,
     lemonadeInStock: 0,
-  })
+    daysPlayed: 0,
+    currentDate: {
+      day: 1,
+      month: 'January',
+      year: 2025,
+    },
+  }
+
+  const [user, setUser] = useState(initialState)
   const [loading, setLoading] = useState(true)
   const [isConnected, setIsConnected] = useState(true)
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const jsonValue = await AsyncStorage.getItem('user')
-        if (jsonValue != null) {
-          setUser(JSON.parse(jsonValue))
-          setLoading(false)
-        }
-      } catch (e) {
-        console.error('Failed to load user data from storage', e)
+  const fetchDataFromStorage = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('user')
+      if (jsonValue != null) {
+        const parsedData = JSON.parse(jsonValue)
+        setUser((prevUser) => ({
+          ...prevUser,
+          ...parsedData,
+          currentDate: {
+            ...prevUser.currentDate,
+            ...parsedData.currentDate,
+          },
+        }))
       }
+    } catch (e) {
+      console.error('Failed to load user data from storage', e)
+    } finally {
+      setLoading(false)
     }
-    fetchData()
-  }, [])
+  }
+
+  const fetchDataFromFirebase = () => {
+    const unsub = onSnapshot(
+      doc(db, 'users', '2VYQnKwksn9qH3wehHR5'),
+      (doc) => {
+        if (doc.exists()) {
+          const data = doc.data()
+          setUser((prevUser) => ({
+            ...prevUser,
+            ...data,
+            currentDate: {
+              ...prevUser.currentDate,
+              ...data.currentDate,
+            },
+          }))
+        }
+        setLoading(false)
+        console.log('User data fetched from Firebase')
+      }
+    )
+    return unsub
+  }
 
   useEffect(() => {
     const unsubscribe = NetInfo.addEventListener((state) => {
       setIsConnected(state.isConnected)
       if (state.isConnected) {
-        const unsub = onSnapshot(
-          doc(db, 'users', '2VYQnKwksn9qH3wehHR5'),
-          (doc) => {
-            if (doc.exists()) {
-              const data = doc.data()
-              setUser({
-                username: data.username,
-                accountBalance: data.accountBalance,
-                lemonCount: data.lemonCount,
-                sugarCount: data.sugarCount,
-                waterCount: data.waterCount,
-                totalProfit: data.totalProfit,
-                lemonadeInStock: data.lemonadeInStock,
-              })
-              setLoading(false)
-              console.log('User data fetched from Firebase')
-            }
-          }
-        )
+        const unsub = fetchDataFromFirebase()
         return () => unsub()
       } else {
-        console.log('No internet connection, using local storage data')
+        fetchDataFromStorage()
       }
     })
     return () => unsubscribe()
-  }, [isConnected])
+  }, [])
 
   const updateUserData = async (reason) => {
     try {
@@ -86,7 +104,7 @@ export const UserProvider = ({ children }) => {
     }, 60000)
 
     return () => clearInterval(interval)
-  }, [user])
+  }, [user, isConnected])
 
   useEffect(() => {
     const handleAppStateChange = (nextAppState) => {
@@ -103,7 +121,7 @@ export const UserProvider = ({ children }) => {
     return () => {
       subscription.remove()
     }
-  }, [user])
+  }, [user, isConnected])
 
   return (
     <UserContext.Provider value={{ user, setUser, loading }}>
