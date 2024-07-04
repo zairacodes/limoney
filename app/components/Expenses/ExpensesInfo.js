@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, Button, StyleSheet, FlatList, Alert } from "react-native";
 import { useContext } from "react";
-import { AccountContext } from "../../context/AccountContext";
 import Tax from "./Tax";
 import RandomEvents from "./RandomEvents";
 import { UserContext } from "../../context/UserContext";
