@@ -1,94 +1,111 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Image } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
 import { Button } from "react-native-paper";
-import { AccountContext } from "../../context/AccountContext";
+import { UserContext } from "../../context/UserContext";
+import { colours } from "../../utils/colours";
 
 const StockList = () => {
-  const { accBalance, setAccBalance } = useContext(AccountContext);
-  const [lemonadeInStock, setLemonadeInStock] = useState(3); // 3 lemonades in stock to start with for testing
-  const [lemonStock, setLemonStock] = useState(0);
-  const [waterStock, setWaterStock] = useState(0);
-  const [sugarStock, setSugarStock] = useState(0);
+  const { user, setUser } = useContext(UserContext);
+  const [selling, setSelling] = useState(false);
 
   useEffect(() => {
-    const makeLemonade = setInterval(() => {
-      if (lemonStock >= 1 && waterStock >= 4 && sugarStock >= 3) {
-        setLemonadeInStock((currLemonadeInStock) => currLemonadeInStock + 1);
-        setLemonStock((currLemonStock) => currLemonStock - 1);
-        setWaterStock((currWaterStock) => currWaterStock - 4);
-        setSugarStock((currSugarStock) => currSugarStock - 3);
-      }
-    }, 5000); // lemonade produced every 5 seconds for testing
+    let sellLemonade;
 
-    return () => {
-      clearInterval(makeLemonade);
-    };
-  }, [lemonStock, waterStock, sugarStock]);
-
-  useEffect(() => {
-    const sellLemonade = setInterval(() => {
-      if (lemonadeInStock >= 1) {
-        setLemonadeInStock((currLemonadeInStock) => currLemonadeInStock - 1);
-        setAccBalance((currAccBalance) => currAccBalance + 20); // recover £10 total costs and earn £10 profit
-      }
-    }, 6000); // lemonade sold every 6 seconds for testing
+    if (user.lemonadeInStock >= 1) {
+      sellLemonade = setInterval(() => {
+        setUser((prevUser) => ({
+          ...prevUser,
+          lemonadeInStock: prevUser.lemonadeInStock - 1,
+          accountBalance: prevUser.accountBalance + 20,
+        }));
+      }, 5000); // lemonade sold every 5 seconds for testing
+      setSelling(true);
+    }
 
     return () => {
       clearInterval(sellLemonade);
+      setSelling(false);
     };
-  }, [lemonadeInStock]);
+  }, [user.lemonadeInStock]);
 
   return (
     <View>
-      <View style={styles.container}>
+      <View style={styles.box}>
         <Text style={styles.titleText}>
-          Lemonade in Stock: {lemonadeInStock}
+          Lemonade in Stock: {user.lemonadeInStock}
         </Text>
+        {selling && (
+          <View style={styles.loadingBox}>
+            <Text style={styles.loadingText}>Selling...</Text>
+            <Image
+              source={require("../../utils/LoadingGIF.gif")}
+              style={styles.loadingGif}
+            />
+          </View>
+        )}
       </View>
-      <View style={styles.container}>
+      <View style={styles.box}>
         <Text style={styles.titleText}>Stock List:</Text>
-        <View style={styles.stockListContainer}>
-          <View style={styles.leftContainer}>
-            <Text style={styles.ingredientText}>Lemon: {lemonStock} ~ £3</Text>
+        <View style={styles.stockListBox}>
+          <View style={styles.leftCol}>
+            <Text style={styles.stockItemsText}>
+              Lemon: {user.lemonCount} ~ £3
+            </Text>
           </View>
-          <View style={styles.rightContainer}>
+          <View style={styles.rightCol}>
             <Button
               style={styles.button}
-              disabled={accBalance < 3}
+              disabled={user.accountBalance < 3}
               onPress={() => {
-                setLemonStock(lemonStock + 1), setAccBalance(accBalance - 3);
+                setUser((prevUser) => ({
+                  ...prevUser,
+                  lemonCount: prevUser.lemonCount + 1,
+                  accountBalance: prevUser.accountBalance - 3,
+                }));
               }}
             >
               BUY
             </Button>
           </View>
         </View>
-        <View style={styles.stockListContainer}>
-          <View style={styles.leftContainer}>
-            <Text style={styles.ingredientText}>Water: {waterStock} ~ £1</Text>
+        <View style={styles.stockListBox}>
+          <View style={styles.leftCol}>
+            <Text style={styles.stockItemsText}>
+              Water: {user.waterCount} ~ £1
+            </Text>
           </View>
-          <View style={styles.rightContainer}>
+          <View style={styles.rightCol}>
             <Button
               style={styles.button}
-              disabled={accBalance < 1}
+              disabled={user.accountBalance < 1}
               onPress={() => {
-                setWaterStock(waterStock + 1), setAccBalance(accBalance - 1);
+                setUser((prevUser) => ({
+                  ...prevUser,
+                  waterCount: prevUser.waterCount + 1,
+                  accountBalance: prevUser.accountBalance - 1,
+                }));
               }}
             >
               BUY
             </Button>
           </View>
         </View>
-        <View style={styles.stockListContainer}>
-          <View style={styles.leftContainer}>
-            <Text style={styles.ingredientText}>Sugar: {sugarStock} ~ £1</Text>
+        <View style={styles.stockListBox}>
+          <View style={styles.leftCol}>
+            <Text style={styles.stockItemsText}>
+              Sugar: {user.sugarCount} ~ £1
+            </Text>
           </View>
-          <View style={styles.rightContainer}>
+          <View style={styles.rightCol}>
             <Button
               style={styles.button}
-              disabled={accBalance < 1}
+              disabled={user.accountBalance < 1}
               onPress={() => {
-                setSugarStock(sugarStock + 1), setAccBalance(accBalance - 1);
+                setUser((prevUser) => ({
+                  ...prevUser,
+                  sugarCount: prevUser.sugarCount + 1,
+                  accountBalance: prevUser.accountBalance - 1,
+                }));
               }}
             >
               BUY
@@ -101,45 +118,56 @@ const StockList = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
+  box: {
+    flex: 1,
     margin: 10,
     padding: 20,
     borderWidth: 1,
-    // backgroundColor: "beige", // to be changed according to colours.js
+    backgroundColor: colours.paleYellow,
   },
   titleText: {
     textAlign: "center",
     fontSize: 20,
     fontWeight: "bold",
-    // color: "darkorange", // to be changed according to colours.js
   },
-  stockListContainer: {
+  stockListBox: {
     padding: 10,
     flexDirection: "row",
   },
-  leftContainer: {
+  leftCol: {
     flex: 1,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "flex-start",
   },
-  rightContainer: {
+  rightCol: {
     flex: 1,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "flex-end",
   },
-  ingredientText: {
+  stockItemsText: {
     marginTop: "5%",
     fontSize: 18,
-    // color: "darkorange", // to be changed according to colours.js
   },
   button: {
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 50,
     borderWidth: 1,
-    backgroundColor: "darkorange", // to be changed according to colours.js
+    backgroundColor: colours.yellow,
+  },
+  loadingBox: {
+    alignItems: "center",
+    marginTop: 5,
+  },
+  loadingText: {
+    textAlign: "center",
+    fontSize: 16,
+  },
+  loadingGif: {
+    width: 60,
+    height: 60,
   },
 });
 
