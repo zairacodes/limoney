@@ -4,31 +4,26 @@ import { AccountProvider } from "./context/AccountContext.js";
 import { UserProvider } from "./context/UserContext.jsx";
 import { DateProvider } from "./context/DateContext.jsx";
 import { DaysPlayedProvider } from "./context/DaysPlayedContext.jsx";
-import { SafeAreaView, StyleSheet } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { View } from "react-native";
 import Header from "./components/Header.js";
 
 export default function RootLayout() {
+  const insets = useSafeAreaInsets();
+
   return (
     <UserProvider>
       <DaysPlayedProvider>
         <DateProvider>
           <AccountProvider>
-            <SafeAreaView style={styles.container}>
-              <Header />
-              <Stack>
-                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-              </Stack>
-            </SafeAreaView>
+            <View style={{ paddingBottom: Math.max(insets.top, 16) }} />
+            <Header />
+            <Stack>
+              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            </Stack>
           </AccountProvider>
         </DateProvider>
       </DaysPlayedProvider>
     </UserProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingTop: 20,
-  },
-});
