@@ -7,16 +7,21 @@ import { colours } from "../../utils/colours";
 const StockList = () => {
   const { user, setUser } = useContext(UserContext);
   const [selling, setSelling] = useState(false);
+  const taxRate = 0.2;
 
   useEffect(() => {
     let sellLemonade;
 
     if (user.lemonadeInStock >= 1) {
       sellLemonade = setInterval(() => {
+        const profitPerLemonade = 10;
+        const revenuePerLemonade = 20;
+
         setUser((prevUser) => ({
           ...prevUser,
           lemonadeInStock: prevUser.lemonadeInStock - 1,
-          accountBalance: prevUser.accountBalance + 20,
+          accountBalance: prevUser.accountBalance + revenuePerLemonade,
+          totalProfit: prevUser.totalProfit + profitPerLemonade,
         }));
       }, 5000); // lemonade sold every 5 seconds for testing
       setSelling(true);
