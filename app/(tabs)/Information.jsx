@@ -77,7 +77,8 @@ const styles = StyleSheet.create({
   box: {
     backgroundColor: colours.paleYellow,
     margin: 20,
-    borderRadius: 5,
+    borderWidth: 1,
+    borderRadius: 20,
   },
   heading: {
     marginTop: 20,
