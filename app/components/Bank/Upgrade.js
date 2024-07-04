@@ -1,14 +1,15 @@
 import { View, Text, StyleSheet } from "react-native";
 import React from "react";
+import { UserContext } from "../../context/UserContext";
 import { colours } from "../../utils/colours";
 
-const Upgrade = () => {
+export default function Upgrade() {
   return (
     <View style={styles.box}>
       <Text>Upgrade</Text>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   box: {
@@ -19,4 +20,3 @@ const styles = StyleSheet.create({
     backgroundColor: colours.paleYellow,
   },
 });
-export default Upgrade;

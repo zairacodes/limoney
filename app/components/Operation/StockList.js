@@ -4,7 +4,7 @@ import { Button } from "react-native-paper";
 import { UserContext } from "../../context/UserContext";
 import { colours } from "../../utils/colours";
 
-const StockList = () => {
+export default function StockList() {
   const { user, setUser } = useContext(UserContext);
   const [selling, setSelling] = useState(false);
 
@@ -115,7 +115,7 @@ const StockList = () => {
       </View>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   box: {
@@ -170,5 +170,3 @@ const styles = StyleSheet.create({
     height: 60,
   },
 });
-
-export default StockList;
