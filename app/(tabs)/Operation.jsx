@@ -10,9 +10,10 @@ const operation = () => {
     <SafeAreaView style={styles.container}>
       <ImageBackground
         source={require("../utils/backgrounds/OperationsBackground.png")}
-        style={styles.container}
+        style={StyleSheet.absoluteFillObject}
+        resizeMode="cover"
       >
-        <ScrollView>
+        <ScrollView contentContainerStyle={styles.scrollContainer}>
           <Header />
           <StockList />
           <LemonadeRecipe />
@@ -25,6 +26,12 @@ const operation = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  scrollContainer: {
+    flexGrow: 1,
+    paddingTop: 50,
+    paddingBottom: 20,
+    paddingHorizontal: 20,
   },
 });
 

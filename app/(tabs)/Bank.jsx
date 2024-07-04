@@ -4,16 +4,16 @@ import Header from "../components/Header.js";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Investment from "../components/Bank/Investment.js";
 import Upgrade from "../components/Bank/Upgrade.js";
-import { colours } from "../utils/colours.js";
 
 const bank = () => {
   return (
     <SafeAreaView style={styles.container}>
       <ImageBackground
         source={require("../utils/backgrounds/BankBackground.png")}
-        style={styles.container}
+        style={StyleSheet.absoluteFillObject}
+        resizeMode="cover"
       >
-        <ScrollView>
+        <ScrollView contentContainerStyle={styles.scrollContainer}>
           <Header />
           <Investment />
           <Upgrade />
@@ -26,6 +26,12 @@ const bank = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  scrollContainer: {
+    flexGrow: 1,
+    paddingTop: 50,
+    paddingBottom: 20,
+    paddingHorizontal: 20,
   },
 });
 

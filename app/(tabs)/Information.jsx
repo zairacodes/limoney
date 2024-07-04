@@ -17,9 +17,10 @@ const information = () => {
     <SafeAreaView style={styles.container}>
       <ImageBackground
         source={require("../utils/backgrounds/InfoBackground.png")}
-        style={styles.container}
+        style={StyleSheet.absoluteFillObject}
+        resizeMode="cover"
       >
-        <ScrollView>
+        <ScrollView contentContainerStyle={styles.scrollContainer}>
           <View style={styles.box}>
             <Text style={styles.heading}>How To Play</Text>
             <Text style={styles.body}>
@@ -66,6 +67,12 @@ const information = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  scrollContainer: {
+    flexGrow: 1,
+    paddingTop: 50,
+    paddingBottom: 20,
+    paddingHorizontal: 20,
   },
   box: {
     backgroundColor: colours.paleYellow,
