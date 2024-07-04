@@ -67,36 +67,42 @@ export default function Investment() {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View style={styles.box}>
-        <Text style={styles.label}>Investment (2% every 1 min)</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter amount"
-          keyboardType="numeric"
-          onChangeText={(value) => setInvestment(value)}
-          value={investment}
-        />
-        <Button title="Invest" onPress={handleInvest} disabled={isInvesting} />
-        {isInvesting && (
-          <>
-            <Button title="Redeem" onPress={handleRedeem} />
-            <View style={styles.infoContainer}>
-              <Text style={styles.info}>
-                Initial Investment: £{initialInvestment}
-              </Text>
-              <Text style={styles.info}>
-                Current Value: £{investedAmount.toFixed(2)}
-              </Text>
-              <Text style={styles.info}>
-                Interest Earned: £
-                {(investedAmount - initialInvestment).toFixed(2)}
-              </Text>
-              <Text style={styles.info}>
-                Time Elapsed: {calculateTimeElapsed()} min
-              </Text>
-            </View>
-          </>
-        )}
+      <View>
+        <View style={styles.box}>
+          <Text style={styles.label}>Investment (2% every 1 min)</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Enter amount"
+            keyboardType="numeric"
+            onChangeText={(value) => setInvestment(value)}
+            value={investment}
+          />
+          <Button
+            title="Invest"
+            onPress={handleInvest}
+            disabled={isInvesting}
+          />
+          {isInvesting && (
+            <>
+              <Button title="Redeem" onPress={handleRedeem} />
+              <View style={styles.infoContainer}>
+                <Text style={styles.info}>
+                  Initial Investment: £{initialInvestment}
+                </Text>
+                <Text style={styles.info}>
+                  Current Value: £{investedAmount.toFixed(2)}
+                </Text>
+                <Text style={styles.info}>
+                  Interest Earned: £
+                  {(investedAmount - initialInvestment).toFixed(2)}
+                </Text>
+                <Text style={styles.info}>
+                  Time Elapsed: {calculateTimeElapsed()} min
+                </Text>
+              </View>
+            </>
+          )}
+        </View>
       </View>
     </TouchableWithoutFeedback>
   );
