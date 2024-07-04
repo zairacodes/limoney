@@ -1,62 +1,98 @@
-import { DateContext } from '../context/DateContext'
 import { View, Text, StyleSheet } from 'react-native'
 import { useContext, useState, useEffect } from 'react'
-import { DaysPlayedContext } from '../context/DaysPlayedContext'
+import { UserContext } from '../context/UserContext'
 
-export default function Date() {
-    const { date, setDate } = useContext(DateContext)
-    const { daysPlayed, setDaysPlayed} = useContext(DaysPlayedContext)
-    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September','October', 'November', 'December']
-    const [currentDay, setCurrentDay] = useState(date.day)
-    const [currentMonth, setCurrentMonth] = useState(date.month)
-    const [currentYear, setCurrentYear] = useState(date.year)
-    const [maxDays, setMaxDays] = useState(31)
+export default function DateComponent() {
+  const { user, setUser } = useContext(UserContext)
+  const months = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ]
 
-    useEffect(() => {
-        currentDay < maxDays && setTimeout(() => setCurrentDay(currentDay + 1), 1000)
-        setDaysPlayed(daysPlayed + 1)
+  const [currentDay, setCurrentDay] = useState(user.currentDate.day)
+  const [currentMonth, setCurrentMonth] = useState(user.currentDate.month)
+  const [currentYear, setCurrentYear] = useState(user.currentDate.year)
+  const [maxDays, setMaxDays] = useState(31)
 
-        if (currentDay === maxDays) {
-            setTimeout(() => {
-                if(currentMonth === 'December') setCurrentMonth('January')
-                else setCurrentMonth(months[months.indexOf(currentMonth) + 1])
-                setCurrentDay(1)
-            }, 1000)
+  const calculateMaxDays = (month, year) => {
+    const daysInMonth = {
+      January: 31,
+      February: year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0) ? 29 : 28,
+      March: 31,
+      April: 30,
+      May: 31,
+      June: 30,
+      July: 31,
+      August: 31,
+      September: 30,
+      October: 31,
+      November: 30,
+      December: 31,
+    }
+    return daysInMonth[month]
+  }
+
+  useEffect(() => {
+    setMaxDays(calculateMaxDays(currentMonth, currentYear))
+  }, [currentMonth, currentYear])
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (currentDay < maxDays) {
+        setCurrentDay(currentDay + 1)
+      } else {
+        setCurrentDay(1)
+        if (currentMonth === 'December') {
+          setCurrentMonth('January')
+          setCurrentYear(currentYear + 1)
+        } else {
+          setCurrentMonth(months[months.indexOf(currentMonth) + 1])
         }
+      }
 
-        setDate({
-            day: currentDay,
-            month: currentMonth,
-            year: currentYear
-        })
-    }, [currentDay]);
+      setUser((prevUser) => ({
+        ...prevUser,
+        daysPlayed: prevUser.daysPlayed + 1,
+        currentDate: {
+          day: currentDay < maxDays ? currentDay + 1 : 1,
+          month: currentDay < maxDays ? currentMonth : (currentMonth === 'December' ? 'January' : months[months.indexOf(currentMonth) + 1]),
+          year: currentDay < maxDays ? currentYear : (currentMonth === 'December' ? currentYear + 1 : currentYear),
+        },
+      }))
+    }, 1000)
 
-    useEffect(() => {
-        if(currentMonth === 'January' && daysPlayed >= 365) setCurrentYear(currentYear + 1)
+    return () => clearTimeout(timer)
+  }, [currentDay, currentMonth, currentYear, maxDays])
 
-        if(months.indexOf(currentMonth) === 3 || months.indexOf(currentMonth) === 5 || months.indexOf(currentMonth) === 8 || months.indexOf(currentMonth) === 9) setMaxDays(30)
-        else if(months.indexOf(currentMonth) === 1) setMaxDays(28)
-        else setMaxDays(31)
-
-        setDate({
-            day: currentDay,
-            month: currentMonth,
-            year: currentYear
-        })
-    }, [currentMonth])
-
-    return (
-        <View style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
-            <Text style={styles.date}>{date.day} {date.month} {date.year}</Text>
-            <Text style={styles.date}>Total Days Played: {daysPlayed}</Text>
-        </View>
-    )
+  return (
+    <View style={styles.container}>
+      <Text style={styles.date}>
+        {currentDay} {currentMonth} {currentYear}
+      </Text>
+      <Text style={styles.date}>Total Days Played: {user.daysPlayed}</Text>
+    </View>
+  )
 }
 
 const styles = StyleSheet.create({
-    date: {
-        textAlign: 'center',
-        marginTop: 10,
-        fontSize: 15,
-    }
+  container: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  date: {
+    textAlign: 'center',
+    marginTop: 10,
+    fontSize: 15,
+  },
 })
