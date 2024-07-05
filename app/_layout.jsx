@@ -1,9 +1,9 @@
-import { Stack } from 'expo-router'
-import React from 'react'
-import { AccountProvider } from './context/AccountContext.js'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import { UserProvider } from './context/UserContext.jsx'
-import { db } from './src/config/firebase.js'
+import { Stack } from "expo-router";
+import React from "react";
+import { AccountProvider } from "./context/AccountContext.js";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { UserProvider } from "./context/UserContext.jsx";
+import { db } from "./src/config/firebase.js";
 
 export default function RootLayout() {
   return (
@@ -14,5 +14,5 @@ export default function RootLayout() {
         </Stack>
       </AccountProvider>
     </UserProvider>
-  )
+  );
 }

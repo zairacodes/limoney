@@ -1,80 +1,72 @@
-import { createContext, useEffect, useState } from 'react'
-import { doc, onSnapshot, updateDoc } from 'firebase/firestore'
-import { db } from '../src/config/firebase'
-import { AppState } from 'react-native'
+import { createContext, useEffect, useState } from "react";
+import { doc, onSnapshot, updateDoc } from "firebase/firestore";
+import { db } from "../src/config/firebase";
+import { AppState } from "react-native";
 
-export const UserContext = createContext()
+export const UserContext = createContext(null); // Pass data
 
 export const UserProvider = ({ children }) => {
-  const [user, setUser] = useState({
-    username: 'Blalalala',
-    accountBalance: 2000,
-    totalProfit: 0,
-    lemonCount: 0,
-    sugarCount: 0,
-    waterCount: 0,
-    lemonadeInStock: 0,
-  })
-  const [loading, setLoading] = useState(true)
+  const [userId, setUserId] = useState(null); // Pass data
+  const [user, setUser] = useState(null); // Pass data
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsub = onSnapshot(
-      doc(db, 'users', 'vSHbPyV82Y4As0rEVWJG'),
-      (doc) => {
-        if (doc.exists()) {
-          const data = doc.data()
-          setUser({
-            username: data.username,
-            accountBalance: data.accountBalance,
-            lemonCount: data.lemonCount,
-            sugarCount: data.sugarCount,
-            waterCount: data.waterCount,
-            totalProfit: data.totalProfit,
-            lemonadeInStock: data.lemonadeInStock,
-          })
-          setLoading(false)
-        }
+    if (!userId) return; // Pass data
+    const unsub = onSnapshot(doc(db, "users", userId), (doc) => {
+      if (doc.exists()) {
+        const data = doc.data();
+        setUser({
+          username: data.username,
+          accountBalance: data.accountBalance,
+          lemonCount: data.lemonCount,
+          sugarCount: data.sugarCount,
+          waterCount: data.waterCount,
+          totalProfit: data.totalProfit,
+          lemonadeInStock: data.lemonadeInStock,
+        });
+        setLoading(false);
       }
-    )
-    return () => unsub()
-  }, [])
+    });
+    return () => unsub();
+  }, [userId]);
 
   const updateUserDataInFirebase = async (reason) => {
-    const userRef = doc(db, 'users', 'vSHbPyV82Y4As0rEVWJG')
-    await updateDoc(userRef, user)
-    console.log(`User data updated in Firebase due to: ${reason}`)
-  }
+    if (!userId) return; // Pass data
+    const userRef = doc(db, "users", userId);
+    await updateDoc(userRef, user);
+    console.log(`User data updated in Firebase due to: ${reason}`);
+  };
 
   useEffect(() => {
     const interval = setInterval(() => {
-      updateUserDataInFirebase('interval')
-    }, 60000)
+      updateUserDataInFirebase("interval");
+    }, 60000);
 
-    return () => clearInterval(interval)
-  }, [user])
+    return () => clearInterval(interval);
+  }, [user]);
 
   useEffect(() => {
     const handleAppStateChange = (nextAppState) => {
-      if (nextAppState === 'background') {
-        updateUserDataInFirebase('background')
-      } else if (nextAppState === 'inactive') {
-        updateUserDataInFirebase('inactive')
+      if (nextAppState === "background") {
+        updateUserDataInFirebase("background");
+      } else if (nextAppState === "inactive") {
+        updateUserDataInFirebase("inactive");
       }
-    }
+    };
 
     const subscription = AppState.addEventListener(
-      'change',
+      "change",
       handleAppStateChange
-    )
+    );
 
     return () => {
-      subscription.remove()
-    }
-  }, [user])
+      subscription.remove();
+    };
+  }, [user]);
 
   return (
-    <UserContext.Provider value={{ user, setUser, loading }}>
+    <UserContext.Provider value={{ user, setUser, loading, setUserId }}>
       {children}
     </UserContext.Provider>
-  )
-}
+  );
+};
