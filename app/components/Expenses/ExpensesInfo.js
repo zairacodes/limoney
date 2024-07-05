@@ -122,69 +122,74 @@ export default function ExpensesInfo({
   };
 
   return (
-    <View style={styles.container}>
-      <RandomEvents setTransactionHistory={setTransactionHistory} />
-      <View style={styles.rentContainer}>
-        <Text style={styles.text}>Rent: {rent}</Text>
-        <Button
-          style={styles.button}
-          onPress={payRent}
-          disabled={paidMonths.includes(user.currentDate.month)}
-        >
-          PAY THE RENT
-        </Button>
+    <View>
+      <View style={styles.box}>
+        <RandomEvents setTransactionHistory={setTransactionHistory} />
+        <View style={styles.rentContainer}>
+          <Text style={styles.text}>Rent: {rent}</Text>
+          <Button
+            style={styles.button}
+            onPress={payRent}
+            disabled={paidMonths.includes(user.currentDate.month)}
+          >
+            PAY THE RENT
+          </Button>
+        </View>
+        <FlatList
+          data={months}
+          keyExtractor={(item) => item}
+          renderItem={renderMonthItem}
+        />
       </View>
-      <FlatList
-        data={months}
-        keyExtractor={(item) => item}
-        renderItem={renderMonthItem}
-      />
-      <View style={styles.utilitiesContainer}>
-        <Text style={styles.text}>Utilities: {utilities}</Text>
-        <Button
-          style={styles.button}
-          title="Pay Utilities"
-          onPress={payUtilities}
-          disabled={paidUtilitiesMonths.includes(user.currentDate.month)}
-        >
-          PAY UTILITIES
-        </Button>
+      <View style={styles.box}>
+        <View>
+          <Text style={styles.text}>Utilities: {utilities}</Text>
+          <Button
+            style={styles.button}
+            title="Pay Utilities"
+            onPress={payUtilities}
+            disabled={paidUtilitiesMonths.includes(user.currentDate.month)}
+          >
+            PAY UTILITIES
+          </Button>
+        </View>
       </View>
       <Tax
         transactionHistory={transactionHistory}
         setTransactionHistory={setTransactionHistory}
       />
-      <Text style={styles.text}>Payment History</Text>
-      <ScrollView style={styles.scrollView}>
-        {transactionHistory.map((item, index) => (
-          <View key={index} style={styles.transactionItem}>
-            <Text>
-              {item.date} - {item.description}: £{item.amount}
-            </Text>
-          </View>
-        ))}
-      </ScrollView>
+      <View style={styles.box}>
+        <Text style={styles.text}>Payment History</Text>
+        <ScrollView style={styles.scrollView}>
+          {transactionHistory.map((item, index) => (
+            <View key={index} style={styles.transactionItem}>
+              <Text>
+                {item.date} - {item.description}: £{item.amount}
+              </Text>
+            </View>
+          ))}
+        </ScrollView>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  box: {
+    flex: 1,
+    margin: 10,
     padding: 20,
+    borderWidth: 1,
+    borderRadius: 20,
+    backgroundColor: colours.paleYellow,
   },
   rentContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 20,
-  },
-  utilitiesContainer: {
-    marginTop: 20,
-    marginBottom: 20,
   },
   text: {
     paddingRight: 10,
-    fontSize: 20,
-    color: "orange",
+    fontSize: 18,
   },
   monthContainer: {
     flexDirection: "row",
