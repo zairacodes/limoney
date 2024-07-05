@@ -1,15 +1,7 @@
-import React, { useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  Alert,
-  ScrollView,
-} from "react-native";
+import React, { useEffect, useState, useContext } from "react";
+import { View, Text, StyleSheet, Alert, ScrollView } from "react-native";
 import { Button } from "react-native-paper";
 import { colours } from "../../utils/colours";
-import { useContext } from "react";
 import Tax from "./Tax";
 import RandomEvents from "./RandomEvents";
 import { UserContext } from "../../context/UserContext";
@@ -91,11 +83,11 @@ export default function ExpensesInfo({
     setTransactionHistory((prevHistory) => [newTransaction, ...prevHistory]);
   };
 
-  const renderMonthItem = ({ item }) => {
+  const renderMonthItem = (item) => {
     const isRentPaid = paidMonths.includes(item);
     const isUtilitiesPaid = paidUtilitiesMonths.includes(item);
     return (
-      <View style={styles.monthContainer}>
+      <View key={item} style={styles.monthContainer}>
         <Text style={styles.monthText}>{item}: </Text>
         <View style={styles.statusContainer}>
           <Text
@@ -135,11 +127,7 @@ export default function ExpensesInfo({
             PAY THE RENT
           </Button>
         </View>
-        <FlatList
-          data={months}
-          keyExtractor={(item) => item}
-          renderItem={renderMonthItem}
-        />
+        <View>{months.map(renderMonthItem)}</View>
       </View>
       <View style={styles.box}>
         <View>
