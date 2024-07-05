@@ -101,7 +101,7 @@ export const UserProvider = ({ children }) => {
   useEffect(() => {
     const handleAppStateChange = (nextAppState) => {
       if (nextAppState === "background" || nextAppState === "inactive") {
-        updateUserData(nextAppState);
+        updateUserDataInFirebase(nextAppState);
       }
     };
 
