@@ -92,7 +92,7 @@ export const UserProvider = ({ children }) => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      updateUserData("interval");
+      updateUserDataInFirebase("interval");
     }, 60000);
 
     return () => clearInterval(interval);
@@ -101,7 +101,7 @@ export const UserProvider = ({ children }) => {
   useEffect(() => {
     const handleAppStateChange = (nextAppState) => {
       if (nextAppState === "background" || nextAppState === "inactive") {
-        updateUserData(nextAppState);
+        updateUserDataInFirebase(nextAppState);
       }
     };
 
