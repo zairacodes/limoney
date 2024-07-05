@@ -17,12 +17,16 @@ export default function Investment() {
   const [initialInvestment, setInitialInvestment] = useState(
     user.investmentDetails.initialInvestment
   );
-  const [investedAmount, setInvestedAmount] = useState(0);
+  const [investedAmount, setInvestedAmount] = useState(
+    user.investmentDetails.currentValue
+  );
   const [isInvesting, setIsInvesting] = useState(
     user.investmentDetails.currentValue ? true : false
   );
   const [startTime, setStartTime] = useState(null);
-  const [timeElapsed, setTimeElapsed] = useState(0);
+  const [timeElapsed, setTimeElapsed] = useState(
+    user.investmentDetails.timeElapsed
+  );
 
   useEffect(() => {
     let timer;
@@ -73,6 +77,12 @@ export default function Investment() {
       accountBalance: (
         Number(prevUser.accountBalance) + investedAmount
       ).toFixed(2),
+      investmentDetails: {
+        currentValue: null,
+        initialInvestment: null,
+        interestEarned: null,
+        timeElapsed: null,
+      },
     }));
     setInvestedAmount(0);
     setIsInvesting(false);
