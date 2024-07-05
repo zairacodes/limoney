@@ -2,14 +2,18 @@ import React, { useEffect, useState, useContext } from "react";
 import { View, Text, Button, StyleSheet, Alert } from "react-native";
 
 import { UserContext } from "../../context/UserContext";
-
+import { DateContext } from "../../context/DateContext";
 export default function Tax({ setTransactionHistory }) {
   const { user, setUser } = useContext(UserContext);
   const [tax, setTax] = useState(0);
+  const { date } = useContext(DateContext);
 
   const logTransaction = (description, amount) => {
-    const date = new Date().toLocaleString();
-    const newTransaction = { description, amount, date };
+    const newTransaction = {
+      description,
+      amount,
+      date: `${date.day} ${date.month} ${date.year}`,
+    };
     setTransactionHistory((prevHistory) => [newTransaction, ...prevHistory]);
   };
 
@@ -41,7 +45,7 @@ export default function Tax({ setTransactionHistory }) {
   return (
     <View style={styles.taxContainer}>
       <Text style={styles.text}>Tax to Pay: {tax.toFixed(2)}</Text>
-      <Button title="Pay Tax" onPress={payTax} />
+      <Button title="Pay Tax" onPress={payTax} disabled={tax === 0} />
     </View>
   );
 }

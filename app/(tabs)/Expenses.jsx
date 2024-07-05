@@ -10,7 +10,6 @@ const expenses = () => {
   return (
     <SafeAreaView>
       <Header />
-      <Text style={styles.text}>Expenses page</Text>
       <ExpensesInfo
         rent={rent}
         setRent={setRent}

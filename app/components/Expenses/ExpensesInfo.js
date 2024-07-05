@@ -1,10 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, Button, StyleSheet, FlatList, Alert } from "react-native";
+import {
+  View,
+  Text,
+  Button,
+  StyleSheet,
+  FlatList,
+  Alert,
+  ScrollView,
+} from "react-native";
 import { useContext } from "react";
-import { AccountContext } from "../../context/AccountContext";
 import Tax from "./Tax";
 import RandomEvents from "./RandomEvents";
 import { UserContext } from "../../context/UserContext";
+import { DateContext } from "../../context/DateContext";
 
 export default function ExpensesInfo({
   rent,
@@ -13,31 +21,42 @@ export default function ExpensesInfo({
   utilities,
 }) {
   const { user, setUser } = useContext(UserContext);
+  const { date } = useContext(DateContext);
   const [transactionHistory, setTransactionHistory] = useState([]);
+  const [paidMonths, setPaidMonths] = useState([]);
+  const [paidUtilitiesMonths, setPaidUtilitiesMonths] = useState([]);
 
   const months = [
-    { id: "1", month: "January", status: "paid" },
-    { id: "2", month: "February", status: "pending" },
-    { id: "3", month: "March", status: "paid" },
-    { id: "4", month: "April", status: "pending" },
-    { id: "5", month: "May", status: "paid" },
-    { id: "6", month: "June", status: "pending" },
-    { id: "7", month: "July", status: "paid" },
-    { id: "8", month: "August", status: "pending" },
-    { id: "9", month: "September", status: "paid" },
-    { id: "10", month: "October", status: "pending" },
-    { id: "11", month: "November", status: "paid" },
-    { id: "12", month: "December", status: "pending" },
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
   ];
+
+  useEffect(() => {
+    if (date.month === "January") {
+      setPaidMonths([]);
+      setPaidUtilitiesMonths([]);
+    }
+  }, [date.month]);
 
   const payRent = () => {
     if (user.accountBalance >= rent) {
-      setRent(0);
+      logTransaction("Rent payment", rent);
       setUser((prevUser) => ({
         ...prevUser,
         accountBalance: prevUser.accountBalance - rent,
       }));
-      logTransaction("Rent payment", rent);
+      setPaidMonths((prev) => [...prev, date.month]);
+      setRent(2000);
     } else {
       Alert.alert(
         "Insufficient funds",
@@ -48,12 +67,13 @@ export default function ExpensesInfo({
 
   const payUtilities = () => {
     if (user.accountBalance >= utilities) {
-      setUtilities(0);
+      logTransaction("Utilities payment", utilities);
       setUser((prevUser) => ({
         ...prevUser,
         accountBalance: prevUser.accountBalance - utilities,
       }));
-      logTransaction("Utilities payment", utilities);
+      setPaidUtilitiesMonths((prev) => [...prev, date.month]);
+      setUtilities(500);
     } else {
       Alert.alert(
         "Insufficient funds",
@@ -63,9 +83,42 @@ export default function ExpensesInfo({
   };
 
   const logTransaction = (description, amount) => {
-    const date = new Date().toLocaleString();
-    const newTransaction = { description, amount, date };
+    const newTransaction = {
+      description,
+      amount,
+      date: `${date.day} ${date.month} ${date.year}`,
+    };
     setTransactionHistory((prevHistory) => [newTransaction, ...prevHistory]);
+  };
+
+  const renderMonthItem = ({ item }) => {
+    const isRentPaid = paidMonths.includes(item);
+    const isUtilitiesPaid = paidUtilitiesMonths.includes(item);
+    return (
+      <View style={styles.monthContainer}>
+        <Text style={styles.monthText}>{item}: </Text>
+        <View style={styles.statusContainer}>
+          <Text
+            style={[
+              styles.statusText,
+              isRentPaid ? styles.paid : styles.pending,
+            ]}
+          >
+            Rent {isRentPaid ? "paid" : "pending"}
+          </Text>
+        </View>
+        <View style={styles.statusContainer}>
+          <Text
+            style={[
+              styles.statusText,
+              isUtilitiesPaid ? styles.paid : styles.pending,
+            ]}
+          >
+            Utilities {isUtilitiesPaid ? "paid" : "pending"}
+          </Text>
+        </View>
+      </View>
+    );
   };
 
   return (
@@ -73,45 +126,39 @@ export default function ExpensesInfo({
       <RandomEvents setTransactionHistory={setTransactionHistory} />
       <View style={styles.rentContainer}>
         <Text style={styles.text}>Rent: {rent}</Text>
-        <Button title="Pay The Rent" onPress={payRent} />
+        <Button
+          title="Pay The Rent"
+          onPress={payRent}
+          disabled={paidMonths.includes(date.month)}
+        />
       </View>
       <FlatList
         data={months}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <View style={styles.monthContainer}>
-            <Text style={styles.monthText}>{item.month}: </Text>
-            <Text
-              style={[
-                styles.statusText,
-                item.status === "paid" ? styles.paid : styles.pending,
-              ]}
-            >
-              {item.status}
-            </Text>
-          </View>
-        )}
+        keyExtractor={(item) => item}
+        renderItem={renderMonthItem}
       />
       <View style={styles.utilitiesContainer}>
         <Text style={styles.text}>Utilities: {utilities}</Text>
-        <Button title="Pay Utilities" onPress={payUtilities} />
+        <Button
+          title="Pay Utilities"
+          onPress={payUtilities}
+          disabled={paidUtilitiesMonths.includes(date.month)}
+        />
       </View>
       <Tax
         transactionHistory={transactionHistory}
         setTransactionHistory={setTransactionHistory}
       />
       <Text style={styles.text}>Payment History</Text>
-      <FlatList
-        data={transactionHistory}
-        keyExtractor={(item, index) => index}
-        renderItem={({ item }) => (
-          <View>
+      <ScrollView style={styles.scrollView}>
+        {transactionHistory.map((item, index) => (
+          <View key={index} style={styles.transactionItem}>
             <Text>
               {item.date} - {item.description}: £{item.amount}
             </Text>
           </View>
-        )}
-      />
+        ))}
+      </ScrollView>
     </View>
   );
 }
@@ -142,6 +189,9 @@ const styles = StyleSheet.create({
   monthText: {
     fontSize: 16,
   },
+  statusContainer: {
+    marginLeft: 10,
+  },
   statusText: {
     fontSize: 16,
   },
@@ -150,5 +200,12 @@ const styles = StyleSheet.create({
   },
   pending: {
     color: "red",
+  },
+  scrollView: {
+    marginTop: 10,
+    maxHeight: 200,
+  },
+  transactionItem: {
+    paddingVertical: 5,
   },
 });

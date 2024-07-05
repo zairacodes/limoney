@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Alert } from "react-native";
 import { UserContext } from "../../context/UserContext";
-
+import { DateContext } from "../../context/DateContext";
 export default function RandomEvents({ setTransactionHistory }) {
   const { user, setUser } = useContext(UserContext);
-
+  const { date } = useContext(DateContext);
   const randomEvents = [
     {
       type: "Bad Weather",
@@ -105,8 +105,11 @@ export default function RandomEvents({ setTransactionHistory }) {
   };
 
   const logTransaction = (description, amount) => {
-    const date = new Date().toLocaleString();
-    const newTransaction = { description, amount, date };
+    const newTransaction = {
+      description,
+      amount,
+      date: `${date.day} ${date.month} ${date.year}`,
+    };
     setTransactionHistory((prevHistory) => [newTransaction, ...prevHistory]);
   };
 
