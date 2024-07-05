@@ -16,8 +16,6 @@ export default function LemonadeRecipe() {
         waterCount: prevUser.waterCount - 4,
         sugarCount: prevUser.sugarCount - 3,
       }));
-    } else {
-      alert("You do not have enough ingredients in stock to make lemonade.");
     }
   };
 
@@ -27,7 +25,13 @@ export default function LemonadeRecipe() {
       <Text style={styles.ingredientText}>Lemon x 1</Text>
       <Text style={styles.ingredientText}>Water x 4</Text>
       <Text style={styles.ingredientText}>Sugar x 3</Text>
-      <Button style={styles.button} onPress={makeLemonade}>
+      <Button
+        style={styles.button}
+        onPress={makeLemonade}
+        disabled={
+          user.lemonCount < 1 || user.waterCount < 4 || user.sugarCount < 3
+        }
+      >
         MAKE LEMONADE
       </Button>
     </View>
