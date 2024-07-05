@@ -1,5 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
-import { View, Text, Button, StyleSheet, Alert } from "react-native";
+import { View, Text, StyleSheet, Alert } from "react-native";
+import { Button } from "react-native-paper";
+import { colours } from "../../utils/colours";
 import { UserContext } from "../../context/UserContext";
 
 export default function Tax({ setTransactionHistory }) {
@@ -41,20 +43,33 @@ export default function Tax({ setTransactionHistory }) {
   };
 
   return (
-    <View style={styles.taxContainer}>
+    <View style={styles.box}>
       <Text style={styles.text}>Tax to Pay: {tax.toFixed(2)}</Text>
-      <Button title="Pay Tax" onPress={payTax} disabled={tax === 0} />
+      <Button style={styles.button} onPress={payTax} disabled={tax === 0}>
+        PAY TAX
+      </Button>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  taxContainer: {
-    marginTop: 20,
+  box: {
+    flex: 1,
+    margin: 10,
+    padding: 20,
+    borderWidth: 1,
+    borderRadius: 20,
+    backgroundColor: colours.paleYellow,
   },
   text: {
-    fontSize: 20,
-    color: "orange",
-    marginBottom: 10,
+    fontSize: 18,
+  },
+  button: {
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: "5%",
+    borderRadius: 50,
+    borderWidth: 1,
+    backgroundColor: colours.yellow,
   },
 });

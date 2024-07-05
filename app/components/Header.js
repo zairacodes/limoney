@@ -15,7 +15,7 @@ export default function Header() {
       <Text style={styles.text}>Account Balance: £{formattedAccBalance}</Text>
       <ProgressBar
         style={styles.progressBar}
-        progress={0.5}
+        progress={formattedAccBalance}
         color={MD3Colors.error50}
       />
       <Date />

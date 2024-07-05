@@ -3,11 +3,11 @@ import {
   View,
   Text,
   TextInput,
-  Button,
   StyleSheet,
   Keyboard,
   TouchableWithoutFeedback,
 } from "react-native";
+import { Button } from "react-native-paper";
 import { UserContext } from "../../context/UserContext";
 import { colours } from "../../utils/colours";
 
@@ -78,13 +78,17 @@ export default function Investment() {
             value={investment}
           />
           <Button
-            title="Invest"
+            style={styles.button}
             onPress={handleInvest}
             disabled={isInvesting}
-          />
+          >
+            INVEST
+          </Button>
           {isInvesting && (
             <>
-              <Button title="Redeem" onPress={handleRedeem} />
+              <Button style={styles.button} onPress={handleRedeem}>
+                REDEEM
+              </Button>
               <View style={styles.infoContainer}>
                 <Text style={styles.info}>
                   Initial Investment: £{initialInvestment}
@@ -136,5 +140,13 @@ const styles = StyleSheet.create({
   info: {
     fontSize: 16,
     marginBottom: 5,
+  },
+  button: {
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: "5%",
+    borderRadius: 50,
+    borderWidth: 1,
+    backgroundColor: colours.yellow,
   },
 });
