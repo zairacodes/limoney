@@ -7,8 +7,11 @@ export default function Tax({ setTransactionHistory }) {
   const [tax, setTax] = useState(0);
 
   const logTransaction = (description, amount) => {
-    const date = new Date().toLocaleString();
-    const newTransaction = { description, amount, date };
+    const newTransaction = {
+      description,
+      amount,
+      date: `${user.currentDate.day} ${user.currentDate.month} ${user.currentDate.year}`,
+    };
     setTransactionHistory((prevHistory) => [newTransaction, ...prevHistory]);
   };
 
@@ -40,7 +43,7 @@ export default function Tax({ setTransactionHistory }) {
   return (
     <View style={styles.taxContainer}>
       <Text style={styles.text}>Tax to Pay: {tax.toFixed(2)}</Text>
-      <Button title="Pay Tax" onPress={payTax} />
+      <Button title="Pay Tax" onPress={payTax} disabled={tax === 0} />
     </View>
   );
 }
