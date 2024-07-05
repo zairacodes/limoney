@@ -13,7 +13,6 @@ export default function ExpensesInfo({
   utilities,
 }) {
   const { user, setUser } = useContext(UserContext);
-
   const [transactionHistory, setTransactionHistory] = useState([]);
   const [paidMonths, setPaidMonths] = useState([]);
   const [paidUtilitiesMonths, setPaidUtilitiesMonths] = useState([]);
@@ -39,6 +38,20 @@ export default function ExpensesInfo({
       setPaidUtilitiesMonths([]);
     }
   }, [user.currentDate.month]);
+
+  useEffect(() => {
+    if (user.accountBalance <= 0) {
+      Alert.alert(
+        "Game Over",
+        "Your account balance is zero or below. Game over!"
+      );
+      setUser((prevUser) => ({
+        ...prevUser,
+        accountBalance: 0,
+      }));
+      //  further logic here for game over
+    }
+  }, [user.accountBalance]);
 
   const payRent = () => {
     if (user.accountBalance >= rent) {
