@@ -14,31 +14,53 @@ import { colours } from "../../utils/colours";
 export default function Investment() {
   const { user, setUser } = useContext(UserContext);
   const [investment, setInvestment] = useState("");
-  const [initialInvestment, setInitialInvestment] = useState(0);
+  const [initialInvestment, setInitialInvestment] = useState(
+    user.investmentDetails.initialInvestment
+  );
   const [investedAmount, setInvestedAmount] = useState(0);
-  const [isInvesting, setIsInvesting] = useState(false);
+  const [isInvesting, setIsInvesting] = useState(
+    user.investmentDetails.currentValue ? true : false
+  );
   const [startTime, setStartTime] = useState(null);
+  const [timeElapsed, setTimeElapsed] = useState(0);
 
   useEffect(() => {
     let timer;
     if (isInvesting) {
-      setStartTime(new Date());
+      if (!startTime) {
+        setStartTime(new Date());
+      }
       timer = setInterval(() => {
         setInvestedAmount((prevAmount) => prevAmount * 1.02);
+        setTimeElapsed(calculateTimeElapsed);
       }, 60000);
     }
     return () => clearInterval(timer);
-  }, [isInvesting]);
+  }, [isInvesting, startTime]);
+
+  useEffect(() => {
+    if (isInvesting) {
+      setUser((prevUser) => ({
+        ...prevUser,
+        investmentDetails: {
+          currentValue: investedAmount,
+          initialInvestment: initialInvestment,
+          interestEarned: (investedAmount - initialInvestment).toFixed(2),
+          timeElapsed: timeElapsed,
+        },
+      }));
+    }
+  }, [investedAmount, timeElapsed, isInvesting]);
 
   const handleInvest = () => {
     const investmentValue = Number(investment);
     if (investmentValue > 0 && investmentValue <= user.accountBalance) {
+      setInvestedAmount(investmentValue);
+      setInitialInvestment(investmentValue);
       setUser((prevUser) => ({
         ...prevUser,
         accountBalance: (prevUser.accountBalance - investmentValue).toFixed(2),
       }));
-      setInvestedAmount(investmentValue);
-      setInitialInvestment(investmentValue);
       setIsInvesting(true);
       setInvestment("");
       Keyboard.dismiss();
@@ -54,6 +76,8 @@ export default function Investment() {
     }));
     setInvestedAmount(0);
     setIsInvesting(false);
+    setStartTime(null);
+    setTimeElapsed(0);
   };
 
   const calculateTimeElapsed = () => {
@@ -100,9 +124,7 @@ export default function Investment() {
                   Interest Earned: £
                   {(investedAmount - initialInvestment).toFixed(2)}
                 </Text>
-                <Text style={styles.info}>
-                  Time Elapsed: {calculateTimeElapsed()} min
-                </Text>
+                <Text style={styles.info}>Time Elapsed: {timeElapsed} min</Text>
               </View>
             </>
           )}
