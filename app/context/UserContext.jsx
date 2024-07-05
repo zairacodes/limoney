@@ -22,6 +22,12 @@ export const UserProvider = ({ children }) => {
       month: "January",
       year: 2025,
     },
+    investmentDetails: {
+      currentValue: null,
+      initialInvestment: null,
+      interestEarned: null,
+      timeElapsed: null,
+    },
   };
 
   const [user, setUser] = useState(initialState);
@@ -40,6 +46,10 @@ export const UserProvider = ({ children }) => {
           currentDate: {
             ...prevUser.currentDate,
             ...parsedData.currentDate,
+          },
+          investmentDetails: {
+            ...prevUser.investmentDetails,
+            ...parsedData.investmentDetails,
           },
         }));
       }
@@ -61,6 +71,10 @@ export const UserProvider = ({ children }) => {
           currentDate: {
             ...prevUser.currentDate,
             ...data.currentDate,
+          },
+          investmentDetails: {
+            ...prevUser.investmentDetails,
+            ...data.investmentDetails,
           },
         }));
       }
