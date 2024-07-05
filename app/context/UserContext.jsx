@@ -92,7 +92,7 @@ export const UserProvider = ({ children }) => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      updateUserData("interval");
+      updateUserDataInFirebase("interval");
     }, 60000);
 
     return () => clearInterval(interval);
