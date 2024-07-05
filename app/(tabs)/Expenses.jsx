@@ -1,4 +1,4 @@
-import { ImageBackground } from "react-native";
+import { ScrollView, StyleSheet, ImageBackground } from "react-native";
 import React, { useState } from "react";
 import ExpensesInfo from "../components/Expenses/ExpensesInfo.js";
 
@@ -8,17 +8,28 @@ const expenses = () => {
   return (
     <ImageBackground
       source={require("../utils/backgrounds/ExpensesBackground.png")}
-      // style={StyleSheet.absoluteFillObject}
+      style={StyleSheet.absoluteFillObject}
       resizeMode="cover"
     >
-      <ExpensesInfo
-        rent={rent}
-        setRent={setRent}
-        utilities={utilities}
-        setUtilities={setUtilities}
-      />
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <ExpensesInfo
+          rent={rent}
+          setRent={setRent}
+          utilities={utilities}
+          setUtilities={setUtilities}
+        />
+      </ScrollView>
     </ImageBackground>
   );
 };
+
+const styles = StyleSheet.create({
+  scrollContainer: {
+    flexGrow: 1,
+    paddingTop: 50,
+    paddingBottom: 20,
+    paddingHorizontal: 20,
+  },
+});
 
 export default expenses;
