@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
-  Button,
   StyleSheet,
   FlatList,
   Alert,
   ScrollView,
 } from "react-native";
+import { Button } from "react-native-paper";
+import { colours } from "../../utils/colours";
 import { useContext } from "react";
 import Tax from "./Tax";
 import RandomEvents from "./RandomEvents";
@@ -126,10 +127,12 @@ export default function ExpensesInfo({
       <View style={styles.rentContainer}>
         <Text style={styles.text}>Rent: {rent}</Text>
         <Button
-          title="Pay The Rent"
+          style={styles.button}
           onPress={payRent}
           disabled={paidMonths.includes(user.currentDate.month)}
-        />
+        >
+          PAY THE RENT
+        </Button>
       </View>
       <FlatList
         data={months}
@@ -139,10 +142,13 @@ export default function ExpensesInfo({
       <View style={styles.utilitiesContainer}>
         <Text style={styles.text}>Utilities: {utilities}</Text>
         <Button
+          style={styles.button}
           title="Pay Utilities"
           onPress={payUtilities}
           disabled={paidUtilitiesMonths.includes(user.currentDate.month)}
-        />
+        >
+          PAY UTILITIES
+        </Button>
       </View>
       <Tax
         transactionHistory={transactionHistory}
@@ -206,5 +212,13 @@ const styles = StyleSheet.create({
   },
   transactionItem: {
     paddingVertical: 5,
+  },
+  button: {
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: "5%",
+    borderRadius: 50,
+    borderWidth: 1,
+    backgroundColor: colours.yellow,
   },
 });
