@@ -1,27 +1,29 @@
-import { View, Text, ScrollView, StyleSheet } from "react-native";
+import { ScrollView, StyleSheet, ImageBackground } from "react-native";
 import React from "react";
-import Header from "../components/Header.js";
-import { SafeAreaView } from "react-native-safe-area-context";
 import Investment from "../components/Bank/Investment.js";
 import Upgrade from "../components/Bank/Upgrade.js";
-import { colours } from "../utils/colours.js";
 
 const bank = () => {
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView>
-        <Header />
+    <ImageBackground
+      source={require("../utils/backgrounds/BankBackground.png")}
+      style={StyleSheet.absoluteFillObject}
+      resizeMode="cover"
+    >
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
         <Investment />
         <Upgrade />
       </ScrollView>
-    </SafeAreaView>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colours.yellow,
+  scrollContainer: {
+    flexGrow: 1,
+    paddingTop: 50,
+    paddingBottom: 20,
+    paddingHorizontal: 20,
   },
 });
 

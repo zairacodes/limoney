@@ -12,7 +12,6 @@ import { useContext } from "react";
 import Tax from "./Tax";
 import RandomEvents from "./RandomEvents";
 import { UserContext } from "../../context/UserContext";
-import { DateContext } from "../../context/DateContext";
 
 export default function ExpensesInfo({
   rent,
@@ -21,7 +20,7 @@ export default function ExpensesInfo({
   utilities,
 }) {
   const { user, setUser } = useContext(UserContext);
-  const { date } = useContext(DateContext);
+
   const [transactionHistory, setTransactionHistory] = useState([]);
   const [paidMonths, setPaidMonths] = useState([]);
   const [paidUtilitiesMonths, setPaidUtilitiesMonths] = useState([]);
@@ -42,11 +41,11 @@ export default function ExpensesInfo({
   ];
 
   useEffect(() => {
-    if (date.month === "January") {
+    if (user.currentDate.month === "January") {
       setPaidMonths([]);
       setPaidUtilitiesMonths([]);
     }
-  }, [date.month]);
+  }, [user.currentDate.month]);
 
   const payRent = () => {
     if (user.accountBalance >= rent) {
@@ -55,7 +54,7 @@ export default function ExpensesInfo({
         ...prevUser,
         accountBalance: prevUser.accountBalance - rent,
       }));
-      setPaidMonths((prev) => [...prev, date.month]);
+      setPaidMonths((prev) => [...prev, user.currentDate.month]);
       setRent(2000);
     } else {
       Alert.alert(
@@ -72,7 +71,7 @@ export default function ExpensesInfo({
         ...prevUser,
         accountBalance: prevUser.accountBalance - utilities,
       }));
-      setPaidUtilitiesMonths((prev) => [...prev, date.month]);
+      setPaidUtilitiesMonths((prev) => [...prev, user.currentDate.month]);
       setUtilities(500);
     } else {
       Alert.alert(
@@ -86,7 +85,7 @@ export default function ExpensesInfo({
     const newTransaction = {
       description,
       amount,
-      date: `${date.day} ${date.month} ${date.year}`,
+      date: `${user.currentDate.day} ${user.currentDate.month} ${user.currentDate.year}`,
     };
     setTransactionHistory((prevHistory) => [newTransaction, ...prevHistory]);
   };
@@ -129,7 +128,7 @@ export default function ExpensesInfo({
         <Button
           title="Pay The Rent"
           onPress={payRent}
-          disabled={paidMonths.includes(date.month)}
+          disabled={paidMonths.includes(user.currentDate.month)}
         />
       </View>
       <FlatList
@@ -142,7 +141,7 @@ export default function ExpensesInfo({
         <Button
           title="Pay Utilities"
           onPress={payUtilities}
-          disabled={paidUtilitiesMonths.includes(date.month)}
+          disabled={paidUtilitiesMonths.includes(user.currentDate.month)}
         />
       </View>
       <Tax
