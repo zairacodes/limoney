@@ -23,10 +23,10 @@ export const UserProvider = ({ children }) => {
       year: 2025,
     },
     investmentDetails: {
-      currentValue: null,
-      initialInvestment: null,
-      interestEarned: null,
-      timeElapsed: null,
+      currentValue: 0,
+      initialInvestment: 0,
+      interestEarned: 0,
+      timeElapsed: 0,
     },
   };
 

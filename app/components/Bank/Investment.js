@@ -78,10 +78,10 @@ export default function Investment() {
         Number(prevUser.accountBalance) + investedAmount
       ).toFixed(2),
       investmentDetails: {
-        currentValue: null,
-        initialInvestment: null,
-        interestEarned: null,
-        timeElapsed: null,
+        currentValue: 0,
+        initialInvestment: 0,
+        interestEarned: 0,
+        timeElapsed: 0,
       },
     }));
     setInvestedAmount(0);
