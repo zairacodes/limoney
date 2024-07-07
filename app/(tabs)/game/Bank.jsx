@@ -1,12 +1,12 @@
 import { ScrollView, StyleSheet, ImageBackground } from "react-native";
 import React from "react";
-import Investment from "../components/Bank/Investment.js";
-import Upgrade from "../components/Bank/Upgrade.js";
+import Investment from "../../components/Bank/Investment.js";
+import Upgrade from "../../components/Bank/Upgrade.js";
 
 const bank = () => {
   return (
     <ImageBackground
-      source={require("../utils/backgrounds/BankBackground.png")}
+      source={require("../../utils/backgrounds/BankBackground.png")}
       style={StyleSheet.absoluteFillObject}
       resizeMode="cover"
     >
