@@ -6,6 +6,8 @@ import {
   ImageBackground,
   TextInput,
   Alert,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 import { Button } from "react-native-paper";
 import { UserContext } from "../context/UserContext";
@@ -50,36 +52,41 @@ const login = () => {
       style={StyleSheet.absoluteFillObject}
       resizeMode="cover"
     >
-      <View style={styles.loginContainer}>
-        {!isLogin ? (
-          <View style={styles.innerContainer}>
-            <Text style={styles.loginText}>
-              Please Enter Your Username and Password
-            </Text>
-            <TextInput
-              style={styles.input}
-              onChangeText={onChangeUsername}
-              value={username}
-              placeholder="Username"
-            />
-            <TextInput
-              secureTextEntry={true}
-              style={styles.input}
-              onChangeText={onChangePwd}
-              value={pwd}
-              placeholder="Password"
-            />
-            <Button style={styles.button} onPress={handleConfirm}>
-              Confirm
-            </Button>
-          </View>
-        ) : (
-          <View>
-            <Text>Welcome! {selectedUserName} !</Text>
-            <Button title="Logout" onPress={handleLogout} />
-          </View>
-        )}
-      </View>
+      <TouchableWithoutFeedback
+        onPress={Keyboard.dismiss}
+        style={styles.keyboardContainer}
+      >
+        <View style={styles.loginContainer}>
+          {!isLogin ? (
+            <View style={styles.innerContainer}>
+              <Text style={styles.loginText}>
+                Please Enter Your Username and Password
+              </Text>
+              <TextInput
+                style={styles.input}
+                onChangeText={onChangeUsername}
+                value={username}
+                placeholder="Username"
+              />
+              <TextInput
+                secureTextEntry={true}
+                style={styles.input}
+                onChangeText={onChangePwd}
+                value={pwd}
+                placeholder="Password"
+              />
+              <Button style={styles.button} onPress={handleConfirm}>
+                Confirm
+              </Button>
+            </View>
+          ) : (
+            <View>
+              <Text>Welcome! {selectedUserName} !</Text>
+              <Button title="Logout" onPress={handleLogout} />
+            </View>
+          )}
+        </View>
+      </TouchableWithoutFeedback>
     </ImageBackground>
   );
 };
@@ -92,6 +99,9 @@ const styles = StyleSheet.create({
   },
   innerContainer: {
     width: "80%",
+  },
+  keyboardContainer: {
+    padding: "100%",
   },
   input: {
     height: 40,
