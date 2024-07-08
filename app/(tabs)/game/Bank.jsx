@@ -21,7 +21,6 @@ const bank = () => {
 const styles = StyleSheet.create({
   scrollContainer: {
     flexGrow: 1,
-    paddingTop: 50,
     paddingBottom: 20,
     paddingHorizontal: 20,
   },

@@ -40,14 +40,18 @@ const login = () => {
   ];
 
   return (
-    <SafeAreaView style={styles.loginContainer}>
-      {!isLogin ? (
-        <View style={styles.innerContainer}>
-          <Image source={require("../utils/Limoney.png")} style={styles.logo} />
-          <Text style={styles.loginText}>
+    <ImageBackground
+      source={require("../utils/backgrounds/loginBackgroundwLogo.png")}
+      style={StyleSheet.absoluteFillObject}
+      resizeMode="cover"
+    >
+      <View style={styles.loginContainer}>
+        {!isLogin ? (
+          <View style={styles.innerContainer}>
+            <Text style={styles.loginText}>
             Please Enter Your Username and Password
-          </Text>
-          <TextInput
+            </Text>
+            <TextInput
             style={styles.input}
             onChangeText={onChangeUsername}
             value={username}
@@ -63,27 +67,21 @@ const login = () => {
           <Button style={styles.button} onPress={handleConfirm}>
             Confirm
           </Button>
-        </View>
-      ) : (
-        <View>
-          <Text>Welcome! {selectedUserName} !</Text>
-          <Button title="Logout" onPress={handleLogout} />
-        </View>
-      )}
-    </SafeAreaView>
+          </View>
+        ) : (
+          <View>
+            <Text>Welcome! {selectedUserName} !</Text>
+            <Button title="Logout" onPress={handleLogout} />
+          </View>
+        )}
+      </View>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
-  logo: {
-    width: "100%",
-    height: "50%",
-    resizeMode: "center",
-    marginTop: "-50%",
-  },
   loginContainer: {
     flex: 1,
-    backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
   },
