@@ -16,6 +16,8 @@ export default function ExpensesInfo({
   const [transactionHistory, setTransactionHistory] = useState([]);
   const [paidMonths, setPaidMonths] = useState([]);
   const [paidUtilitiesMonths, setPaidUtilitiesMonths] = useState([]);
+  const [missedRentPayments, setMissedRentPayments] = useState([]);
+  const [missedUtilitiesPayments, setMissedUtilitiesPayments] = useState([]);
 
   const months = [
     "January",
@@ -62,6 +64,9 @@ export default function ExpensesInfo({
       }));
       setPaidMonths((prev) => [...prev, user.currentDate.month]);
       setRent(2000);
+      // setMissedRentPayments((prev) =>
+      //   prev.filter((month) => month !== user.currentDate.month)
+      // );
     } else {
       Alert.alert(
         "Insufficient funds",
@@ -79,6 +84,9 @@ export default function ExpensesInfo({
       }));
       setPaidUtilitiesMonths((prev) => [...prev, user.currentDate.month]);
       setUtilities(500);
+      // setMissedUtilitiesPayments((prev) =>
+      //   prev.filter((month) => month !== user.currentDate.month)
+      // );
     } else {
       Alert.alert(
         "Insufficient funds",
@@ -99,6 +107,11 @@ export default function ExpensesInfo({
   const renderMonthItem = (item) => {
     const isRentPaid = paidMonths.includes(item);
     const isUtilitiesPaid = paidUtilitiesMonths.includes(item);
+
+    // const isRentMissed = !isRentPaid && missedRentPayments.includes(item);
+    // const isUtilitiesMissed =
+    //   !isUtilitiesPaid && missedUtilitiesPayments.includes(item);
+
     return (
       <View key={item} style={styles.monthContainer}>
         <Text style={styles.monthText}>{item}: </Text>
