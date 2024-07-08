@@ -8,12 +8,12 @@ import {
   Alert,
 } from "react-native";
 import { Button } from "react-native-paper";
-import { UserContext } from "../context/UserContext"; //Pass data
+import { UserContext } from "../context/UserContext";
 import { router } from "expo-router";
 import { colours } from "../utils/colours";
 
 const login = () => {
-  const { setUserId } = useContext(UserContext); //Pass data
+  const { setUserId } = useContext(UserContext);
   const [isLogin, setIsLogin] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [selectedUserName, setSelectedUserName] = useState(null);
@@ -23,7 +23,7 @@ const login = () => {
   const handleConfirm = () => {
     const checkUserExist = users.find((user) => user.label === username);
     if (checkUserExist) {
-      setUserId(checkUserExist.value); //Pass data
+      setUserId(checkUserExist.value);
       router.push("/game");
     } else {
       Alert.alert("Invalid User");
