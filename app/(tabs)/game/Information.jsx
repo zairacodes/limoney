@@ -6,15 +6,15 @@ import {
   ImageBackground,
 } from "react-native";
 import React, { useContext } from "react";
-import { colours } from "../utils/colours";
-import { UserContext } from "../context/UserContext";
+import { colours } from "../../utils/colours";
+import { UserContext } from "../../context/UserContext";
 
 const information = () => {
   const { user } = useContext(UserContext);
 
   return (
     <ImageBackground
-      source={require("../utils/backgrounds/InfoBackground.png")}
+      source={require("../../utils/backgrounds/InfoBackground.png")}
       style={StyleSheet.absoluteFillObject}
       resizeMode="cover"
     >

@@ -1,10 +1,11 @@
 import { useContext } from "react";
 import * as React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Button } from "react-native";
 import { UserContext } from "../context/UserContext";
 import { ProgressBar, MD3Colors } from "react-native-paper";
 import Date from "./Date";
 import { colours } from "../utils/colours";
+import { router } from "expo-router";
 
 export default function Header() {
   const { user } = useContext(UserContext);
@@ -19,6 +20,7 @@ export default function Header() {
         color={MD3Colors.error50}
       />
       <Date />
+      <Button title="Logout" onPress={() => router.dismiss()} />
     </View>
   );
 }

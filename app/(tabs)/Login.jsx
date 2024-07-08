@@ -1,8 +1,9 @@
 import React, { useContext, useState } from "react";
-import { View, Text, StyleSheet, Button } from "react-native";
+import { View, Text, StyleSheet, Button, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Picker } from "@react-native-picker/picker"; // run npm install react-native-picker/picker
 import { UserContext } from "../context/UserContext"; //Pass data
+import { router } from "expo-router";
 
 const login = () => {
   const { setUserId } = useContext(UserContext); //Pass data
@@ -18,6 +19,7 @@ const login = () => {
       setIsLogin(true);
       console.log("selectedUserId >>>", selectedUserId); //Pass data
       console.log("setUserId >>>", setUserId); //Pass data
+      router.push("/game");
     }
   };
 
@@ -39,6 +41,7 @@ const login = () => {
     <SafeAreaView style={styles.loginContainer}>
       {!isLogin ? (
         <View style={styles.innerContainer}>
+          <Image source={require("../utils/Limoney.png")} style={styles.logo} />
           <Text>Please select your name:</Text>
           <Picker
             style={styles.loginPickerStyles}
@@ -71,6 +74,12 @@ const login = () => {
 };
 
 const styles = StyleSheet.create({
+  logo: {
+    width: "100%",
+    height: "50%",
+    resizeMode: "center",
+    marginTop: "-50%",
+  },
   loginContainer: {
     flex: 1,
     backgroundColor: "#fff",
