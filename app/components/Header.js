@@ -11,13 +11,14 @@ import { router } from "expo-router";
 export default function Header() {
   const { user } = useContext(UserContext);
   const formattedAccBalance = Math.round(user.accountBalance);
+  const percentageToGoal = formattedAccBalance / 100000;
 
   return (
     <View style={styles.header}>
       <Text style={styles.text}>Account Balance: £{formattedAccBalance}</Text>
       <ProgressBar
         style={styles.progressBar}
-        progress={formattedAccBalance}
+        progress={percentageToGoal}
         color={MD3Colors.error50}
       />
       <Date />
