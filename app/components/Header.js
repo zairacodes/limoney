@@ -20,7 +20,7 @@ export default function Header() {
         color={MD3Colors.error50}
       />
       <Date />
-      <Button title="Logout" onPress={() => router.push("/Login")} />
+      <Button title="Logout" onPress={() => router.dismiss()} />
     </View>
   );
 }
