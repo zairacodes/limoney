@@ -1,15 +1,7 @@
-import React, { useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  Alert,
-  ScrollView,
-} from "react-native";
+import React, { useEffect, useState, useContext } from "react";
+import { View, Text, StyleSheet, Alert, ScrollView } from "react-native";
 import { Button } from "react-native-paper";
 import { colours } from "../../utils/colours";
-import { useContext } from "react";
 import Tax from "./Tax";
 import RandomEvents from "./RandomEvents";
 import { UserContext } from "../../context/UserContext";
@@ -21,10 +13,11 @@ export default function ExpensesInfo({
   utilities,
 }) {
   const { user, setUser } = useContext(UserContext);
-
   const [transactionHistory, setTransactionHistory] = useState([]);
   const [paidMonths, setPaidMonths] = useState([]);
   const [paidUtilitiesMonths, setPaidUtilitiesMonths] = useState([]);
+  const [missedRentPayments, setMissedRentPayments] = useState([]);
+  const [missedUtilitiesPayments, setMissedUtilitiesPayments] = useState([]);
 
   const months = [
     "January",
@@ -48,6 +41,20 @@ export default function ExpensesInfo({
     }
   }, [user.currentDate.month]);
 
+  useEffect(() => {
+    if (user.accountBalance <= 0) {
+      Alert.alert(
+        "Game Over",
+        "Your account balance is zero or below. Game over!"
+      );
+      setUser((prevUser) => ({
+        ...prevUser,
+        accountBalance: 0,
+      }));
+      //  further logic here for game over
+    }
+  }, [user.accountBalance]);
+
   const payRent = () => {
     if (user.accountBalance >= rent) {
       logTransaction("Rent payment", rent);
@@ -57,6 +64,9 @@ export default function ExpensesInfo({
       }));
       setPaidMonths((prev) => [...prev, user.currentDate.month]);
       setRent(2000);
+      // setMissedRentPayments((prev) =>
+      //   prev.filter((month) => month !== user.currentDate.month)
+      // );
     } else {
       Alert.alert(
         "Insufficient funds",
@@ -74,6 +84,9 @@ export default function ExpensesInfo({
       }));
       setPaidUtilitiesMonths((prev) => [...prev, user.currentDate.month]);
       setUtilities(500);
+      // setMissedUtilitiesPayments((prev) =>
+      //   prev.filter((month) => month !== user.currentDate.month)
+      // );
     } else {
       Alert.alert(
         "Insufficient funds",
@@ -91,11 +104,16 @@ export default function ExpensesInfo({
     setTransactionHistory((prevHistory) => [newTransaction, ...prevHistory]);
   };
 
-  const renderMonthItem = ({ item }) => {
+  const renderMonthItem = (item) => {
     const isRentPaid = paidMonths.includes(item);
     const isUtilitiesPaid = paidUtilitiesMonths.includes(item);
+
+    // const isRentMissed = !isRentPaid && missedRentPayments.includes(item);
+    // const isUtilitiesMissed =
+    //   !isUtilitiesPaid && missedUtilitiesPayments.includes(item);
+
     return (
-      <View style={styles.monthContainer}>
+      <View key={item} style={styles.monthContainer}>
         <Text style={styles.monthText}>{item}: </Text>
         <View style={styles.statusContainer}>
           <Text
@@ -135,11 +153,7 @@ export default function ExpensesInfo({
             PAY THE RENT
           </Button>
         </View>
-        <FlatList
-          data={months}
-          keyExtractor={(item) => item}
-          renderItem={renderMonthItem}
-        />
+        <View>{months.map(renderMonthItem)}</View>
       </View>
       <View style={styles.box}>
         <View>
