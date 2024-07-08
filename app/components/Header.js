@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import * as React from "react";
-import { View, Text, StyleSheet, Button } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
+import { Button } from "react-native-paper";
 import { UserContext } from "../context/UserContext";
 import { ProgressBar, MD3Colors } from "react-native-paper";
 import Date from "./Date";
@@ -20,7 +21,9 @@ export default function Header() {
         color={MD3Colors.error50}
       />
       <Date />
-      <Button title="Logout" onPress={() => router.dismiss()} />
+      <Button style={styles.button} onPress={() => router.dismiss()}>
+        Logout
+      </Button>
     </View>
   );
 }
@@ -39,5 +42,13 @@ const styles = StyleSheet.create({
   },
   progressBar: {
     marginTop: 12,
+  },
+  button: {
+    marginTop: 10,
+    width: "50%",
+    alignSelf: "center",
+    borderRadius: 50,
+    borderWidth: 1,
+    backgroundColor: colours.yellow,
   },
 });

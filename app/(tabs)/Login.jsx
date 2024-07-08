@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { View, Text, StyleSheet, Button, Image } from "react-native";
+import { View, Text, StyleSheet, Button, ImageBackground } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Picker } from "@react-native-picker/picker"; // run npm install react-native-picker/picker
 import { UserContext } from "../context/UserContext"; //Pass data
@@ -38,51 +38,49 @@ const login = () => {
   ];
 
   return (
-    <SafeAreaView style={styles.loginContainer}>
-      {!isLogin ? (
-        <View style={styles.innerContainer}>
-          <Image source={require("../utils/Limoney.png")} style={styles.logo} />
-          <Text>Please select your name:</Text>
-          <Picker
-            style={styles.loginPickerStyles}
-            selectedValue={selectedUserId}
-            onValueChange={(itemValue) => setSelectedUserId(itemValue)}
-          >
-            <Picker.Item label="Select a user" value={null} />
-            {users.map((user) => (
-              <Picker.Item
-                key={user.value}
-                label={user.label}
-                value={user.value}
-              />
-            ))}
-          </Picker>
-          <Button
-            title="Confirm"
-            onPress={handleConfirm}
-            disabled={!selectedUserId}
-          />
-        </View>
-      ) : (
-        <View>
-          <Text>Welcome! {selectedUserName} !</Text>
-          <Button title="Logout" onPress={handleLogout} />
-        </View>
-      )}
-    </SafeAreaView>
+    <ImageBackground
+      source={require("../utils/backgrounds/loginBackgroundwLogo.png")}
+      style={StyleSheet.absoluteFillObject}
+      resizeMode="cover"
+    >
+      <View style={styles.loginContainer}>
+        {!isLogin ? (
+          <View style={styles.innerContainer}>
+            <Text>Please select your name:</Text>
+            <Picker
+              style={styles.loginPickerStyles}
+              selectedValue={selectedUserId}
+              onValueChange={(itemValue) => setSelectedUserId(itemValue)}
+            >
+              <Picker.Item label="Select a user" value={null} />
+              {users.map((user) => (
+                <Picker.Item
+                  key={user.value}
+                  label={user.label}
+                  value={user.value}
+                />
+              ))}
+            </Picker>
+            <Button
+              title="Confirm"
+              onPress={handleConfirm}
+              disabled={!selectedUserId}
+            />
+          </View>
+        ) : (
+          <View>
+            <Text>Welcome! {selectedUserName} !</Text>
+            <Button title="Logout" onPress={handleLogout} />
+          </View>
+        )}
+      </View>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
-  logo: {
-    width: "100%",
-    height: "50%",
-    resizeMode: "center",
-    marginTop: "-50%",
-  },
   loginContainer: {
     flex: 1,
-    backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
   },
