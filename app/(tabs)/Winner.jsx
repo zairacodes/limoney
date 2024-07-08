@@ -3,7 +3,7 @@ import React, { useContext } from "react";
 import { colours } from "../utils/colours";
 import { Button } from "react-native-paper";
 import { UserContext } from "../context/UserContext";
-import { router, useNavigation } from "expo-router";
+import { router } from "expo-router";
 
 export default function Winner() {
   const { user } = useContext(UserContext);
