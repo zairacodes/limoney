@@ -4,6 +4,7 @@ import { db } from "../src/config/firebase";
 import { AppState } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import NetInfo from "@react-native-community/netinfo";
+import { router, useNavigation } from "expo-router";
 
 export const UserContext = createContext(null); // Pass data
 
@@ -34,6 +35,15 @@ export const UserProvider = ({ children }) => {
   const [userId, setUserId] = useState(null); // Pass data
   const [loading, setLoading] = useState(true);
   const [isConnected, setIsConnected] = useState(true);
+  const [beenToWinner, setBeenToWinner] = useState(false);
+  const navigation = useNavigation();
+  const { routes, index } = navigation.getState();
+
+  let currentRoute;
+
+  if (index) {
+    currentRoute = routes[index].name;
+  }
 
   const fetchDataFromStorage = async () => {
     try {
@@ -128,6 +138,15 @@ export const UserProvider = ({ children }) => {
       subscription.remove();
     };
   }, [user, isConnected]);
+
+  if (
+    user.accountBalance >= 100000 &&
+    beenToWinner === false &&
+    currentRoute !== "(tabs)/Winner"
+  ) {
+    router.replace("/Winner");
+    setBeenToWinner(true);
+  }
 
   return (
     <UserContext.Provider value={{ user, setUser, loading, setUserId }}>
