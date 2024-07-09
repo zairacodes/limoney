@@ -28,7 +28,7 @@ export default function Investment() {
     user.investmentDetails.timeElapsed
   );
   const [investmentEnded, setInvestmentEnded] = useState(false);
-  const maxTime = 10; // 10 sec for testing, then change to 180 sec = 180 days = 6 months investment
+  const maxTime = 180;
 
   useEffect(() => {
     let timer;
@@ -37,9 +37,9 @@ export default function Investment() {
         setStartTime(new Date());
       }
       timer = setInterval(() => {
-        setInvestedAmount((prevAmount) => prevAmount * 1.000136); // 0.01% per day
+        setInvestedAmount((prevAmount) => prevAmount * 1.000136);
         setTimeElapsed(calculateTimeElapsed);
-      }, 1000); // 1 sec
+      }, 1000);
     } else {
       setInvestmentEnded(true);
     }
@@ -97,7 +97,7 @@ export default function Investment() {
   const calculateTimeElapsed = () => {
     if (startTime) {
       const now = new Date();
-      const elapsed = Math.floor((now - startTime) / 1000); // 60000 = 1 min 10000 = 10 secs
+      const elapsed = Math.floor((now - startTime) / 1000);
       return elapsed;
     }
     return 0;
@@ -107,7 +107,7 @@ export default function Investment() {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View>
         <View style={styles.box}>
-          <Text style={styles.label}>Investment (5% per year)</Text>
+          <Text style={styles.label}>Investment:</Text>
           <TextInput
             style={styles.input}
             placeholder="Enter amount"
@@ -127,29 +127,38 @@ export default function Investment() {
           {isInvesting && (
             <>
               <View style={styles.infoContainer}>
-                <Text style={styles.info}>
-                  Initial Investment: £{initialInvestment}
-                </Text>
-                <Text style={styles.info}>
-                  Current Value: £{investedAmount.toFixed(2)}
-                </Text>
-                <Text style={styles.info}>
-                  Interest Earned: £
-                  {(investedAmount - initialInvestment).toFixed(2)}
-                </Text>
-                <Text style={styles.info}>
-                  Time Elapsed: {timeElapsed} days
-                </Text>
-                {investmentEnded && timeElapsed === maxTime && (
-                  <>
-                    <Text style={styles.redeemNote}>
-                      Investment period ended. Please redeem your money.
+                <View style={styles.innerBox}>
+                  <View style={styles.leftCol}>
+                    <Text style={styles.info}>Initial Investment:</Text>
+                    <Text style={styles.info}>Current Value:</Text>
+                    <Text style={styles.info}>Interest Earned:</Text>
+                    <Text style={styles.info}>Redeem in:</Text>
+                  </View>
+                  <View style={styles.rightCol}>
+                    <Text style={styles.info}>£{initialInvestment}</Text>
+                    <Text style={styles.info}>
+                      £{investedAmount.toFixed(2)}
                     </Text>
-                    <Button style={styles.button} onPress={handleRedeem}>
-                      REDEEM
-                    </Button>
-                  </>
-                )}
+                    <Text style={styles.info}>
+                      £{(investedAmount - initialInvestment).toFixed(2)}
+                    </Text>
+                    <Text style={styles.info}>
+                      {maxTime - timeElapsed} days
+                    </Text>
+                  </View>
+                </View>
+                <View style={styles.redeemContainer}>
+                  {investmentEnded && timeElapsed === maxTime && (
+                    <>
+                      <Text style={styles.redeemNote}>
+                        Investment period ended. Please redeem your money.
+                      </Text>
+                      <Button style={styles.button} onPress={handleRedeem}>
+                        REDEEM
+                      </Button>
+                    </>
+                  )}
+                </View>
               </View>
             </>
           )}
@@ -169,24 +178,50 @@ const styles = StyleSheet.create({
     backgroundColor: colours.paleYellow,
   },
   label: {
-    fontSize: 18,
     marginBottom: 10,
+    textAlign: "center",
+    fontSize: 20,
+    fontWeight: "bold",
   },
   input: {
     borderWidth: 1,
     padding: 10,
     marginBottom: 10,
+    borderRadius: 16,
   },
   infoContainer: {
-    marginTop: 20,
+    marginTop: 12,
     padding: 10,
+    paddingBottom: -10,
     borderWidth: 1,
     borderColor: "#ddd",
-    borderRadius: 5,
+    borderRadius: 16,
+  },
+  innerBox: {
+    borderColor: "#ddd",
+    borderRadius: 16,
+    flexDirection: "row",
+    justifyContent: "space-around",
+  },
+  leftCol: {
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "flex-start",
+    width: "60%",
+  },
+  rightCol: {
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "flex-end",
+    width: "40%",
   },
   info: {
     fontSize: 16,
     marginBottom: 5,
+  },
+  redeemContainer: {
+    marginBottom: 10,
+    paddingBottom: 10,
   },
   redeemNote: {
     fontSize: 16,
