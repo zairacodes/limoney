@@ -67,7 +67,7 @@ export default function Investment() {
       setInitialInvestment(investmentValue);
       setUser((prevUser) => ({
         ...prevUser,
-        accountBalance: (prevUser.accountBalance - investmentValue).toFixed(2),
+        accountBalance: Number((prevUser.accountBalance - investmentValue).toFixed(2)),
       }));
       setIsInvesting(true);
       setInvestment("");
