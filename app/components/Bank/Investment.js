@@ -27,20 +27,24 @@ export default function Investment() {
   const [timeElapsed, setTimeElapsed] = useState(
     user.investmentDetails.timeElapsed
   );
+  const [investmentEnded, setInvestmentEnded] = useState(false);
+  const maxTime = 180;
 
   useEffect(() => {
     let timer;
-    if (isInvesting) {
+    if (isInvesting && timeElapsed < maxTime) {
       if (!startTime) {
         setStartTime(new Date());
       }
       timer = setInterval(() => {
-        setInvestedAmount((prevAmount) => prevAmount * 1.02);
+        setInvestedAmount((prevAmount) => prevAmount * 1.000136);
         setTimeElapsed(calculateTimeElapsed);
-      }, 60000);
+      }, 1000);
+    } else {
+      setInvestmentEnded(true);
     }
     return () => clearInterval(timer);
-  }, [isInvesting, startTime]);
+  }, [isInvesting, startTime, timeElapsed, investmentEnded]);
 
   useEffect(() => {
     if (isInvesting) {
@@ -93,7 +97,7 @@ export default function Investment() {
   const calculateTimeElapsed = () => {
     if (startTime) {
       const now = new Date();
-      const elapsed = Math.floor((now - startTime) / 60000);
+      const elapsed = Math.floor((now - startTime) / 1000);
       return elapsed;
     }
     return 0;
@@ -103,7 +107,7 @@ export default function Investment() {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View>
         <View style={styles.box}>
-          <Text style={styles.label}>Investment (2% every 1 min)</Text>
+          <Text style={styles.label}>Investment:</Text>
           <TextInput
             style={styles.input}
             placeholder="Enter amount"
@@ -111,30 +115,50 @@ export default function Investment() {
             onChangeText={(value) => setInvestment(value)}
             value={investment}
           />
-          <Button
-            style={styles.button}
-            onPress={handleInvest}
-            disabled={isInvesting}
-          >
-            INVEST
-          </Button>
+          {!isInvesting && (
+            <Button
+              style={styles.button}
+              onPress={handleInvest}
+              disabled={isInvesting}
+            >
+              INVEST
+            </Button>
+          )}
           {isInvesting && (
             <>
-              <Button style={styles.button} onPress={handleRedeem}>
-                REDEEM
-              </Button>
               <View style={styles.infoContainer}>
-                <Text style={styles.info}>
-                  Initial Investment: £{initialInvestment}
-                </Text>
-                <Text style={styles.info}>
-                  Current Value: £{investedAmount.toFixed(2)}
-                </Text>
-                <Text style={styles.info}>
-                  Interest Earned: £
-                  {(investedAmount - initialInvestment).toFixed(2)}
-                </Text>
-                <Text style={styles.info}>Time Elapsed: {timeElapsed} min</Text>
+                <View style={styles.innerBox}>
+                  <View style={styles.leftCol}>
+                    <Text style={styles.info}>Initial Investment:</Text>
+                    <Text style={styles.info}>Current Value:</Text>
+                    <Text style={styles.info}>Interest Earned:</Text>
+                    <Text style={styles.info}>Redeem in:</Text>
+                  </View>
+                  <View style={styles.rightCol}>
+                    <Text style={styles.info}>£{initialInvestment}</Text>
+                    <Text style={styles.info}>
+                      £{investedAmount.toFixed(2)}
+                    </Text>
+                    <Text style={styles.info}>
+                      £{(investedAmount - initialInvestment).toFixed(2)}
+                    </Text>
+                    <Text style={styles.info}>
+                      {maxTime - timeElapsed} days
+                    </Text>
+                  </View>
+                </View>
+                <View style={styles.redeemContainer}>
+                  {investmentEnded && timeElapsed === maxTime && (
+                    <>
+                      <Text style={styles.redeemNote}>
+                        Investment period ended. Please redeem your money.
+                      </Text>
+                      <Button style={styles.button} onPress={handleRedeem}>
+                        REDEEM
+                      </Button>
+                    </>
+                  )}
+                </View>
               </View>
             </>
           )}
@@ -154,24 +178,56 @@ const styles = StyleSheet.create({
     backgroundColor: colours.paleYellow,
   },
   label: {
-    fontSize: 18,
     marginBottom: 10,
+    textAlign: "center",
+    fontSize: 20,
+    fontWeight: "bold",
   },
   input: {
     borderWidth: 1,
     padding: 10,
     marginBottom: 10,
+    borderRadius: 16,
   },
   infoContainer: {
-    marginTop: 20,
+    marginTop: 12,
     padding: 10,
+    paddingBottom: -10,
     borderWidth: 1,
     borderColor: "#ddd",
-    borderRadius: 5,
+    borderRadius: 16,
+  },
+  innerBox: {
+    borderColor: "#ddd",
+    borderRadius: 16,
+    flexDirection: "row",
+    justifyContent: "space-around",
+  },
+  leftCol: {
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "flex-start",
+    width: "60%",
+  },
+  rightCol: {
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "flex-end",
+    width: "40%",
   },
   info: {
     fontSize: 16,
     marginBottom: 5,
+  },
+  redeemContainer: {
+    marginBottom: 10,
+    paddingBottom: 10,
+  },
+  redeemNote: {
+    fontSize: 16,
+    fontWeight: "bold",
+    margin: 10,
+    textAlign: "center",
   },
   button: {
     width: "50%",
