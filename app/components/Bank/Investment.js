@@ -27,20 +27,24 @@ export default function Investment() {
   const [timeElapsed, setTimeElapsed] = useState(
     user.investmentDetails.timeElapsed
   );
+  const [investmentEnded, setInvestmentEnded] = useState(false);
+  const maxTime = 10; // 10 sec for testing, then change to 180 sec = 180 days = 6 months investment
 
   useEffect(() => {
     let timer;
-    if (isInvesting) {
+    if (isInvesting && timeElapsed < maxTime) {
       if (!startTime) {
         setStartTime(new Date());
       }
       timer = setInterval(() => {
-        setInvestedAmount((prevAmount) => prevAmount * 1.02);
+        setInvestedAmount((prevAmount) => prevAmount * 1.000136); // 0.01% per day
         setTimeElapsed(calculateTimeElapsed);
-      }, 60000);
+      }, 1000); // 1 sec
+    } else {
+      setInvestmentEnded(true);
     }
     return () => clearInterval(timer);
-  }, [isInvesting, startTime]);
+  }, [isInvesting, startTime, timeElapsed, investmentEnded]);
 
   useEffect(() => {
     if (isInvesting) {
@@ -93,7 +97,7 @@ export default function Investment() {
   const calculateTimeElapsed = () => {
     if (startTime) {
       const now = new Date();
-      const elapsed = Math.floor((now - startTime) / 60000);
+      const elapsed = Math.floor((now - startTime) / 1000); // 60000 = 1 min 10000 = 10 secs
       return elapsed;
     }
     return 0;
@@ -103,7 +107,7 @@ export default function Investment() {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View>
         <View style={styles.box}>
-          <Text style={styles.label}>Investment (2% every 1 min)</Text>
+          <Text style={styles.label}>Investment (5% per year)</Text>
           <TextInput
             style={styles.input}
             placeholder="Enter amount"
@@ -111,18 +115,17 @@ export default function Investment() {
             onChangeText={(value) => setInvestment(value)}
             value={investment}
           />
-          <Button
-            style={styles.button}
-            onPress={handleInvest}
-            disabled={isInvesting}
-          >
-            INVEST
-          </Button>
+          {!isInvesting && (
+            <Button
+              style={styles.button}
+              onPress={handleInvest}
+              disabled={isInvesting}
+            >
+              INVEST
+            </Button>
+          )}
           {isInvesting && (
             <>
-              <Button style={styles.button} onPress={handleRedeem}>
-                REDEEM
-              </Button>
               <View style={styles.infoContainer}>
                 <Text style={styles.info}>
                   Initial Investment: £{initialInvestment}
@@ -134,7 +137,19 @@ export default function Investment() {
                   Interest Earned: £
                   {(investedAmount - initialInvestment).toFixed(2)}
                 </Text>
-                <Text style={styles.info}>Time Elapsed: {timeElapsed} min</Text>
+                <Text style={styles.info}>
+                  Time Elapsed: {timeElapsed} days
+                </Text>
+                {investmentEnded && timeElapsed === maxTime && (
+                  <>
+                    <Text style={styles.redeemNote}>
+                      Investment period ended. Please redeem your money.
+                    </Text>
+                    <Button style={styles.button} onPress={handleRedeem}>
+                      REDEEM
+                    </Button>
+                  </>
+                )}
               </View>
             </>
           )}
@@ -172,6 +187,12 @@ const styles = StyleSheet.create({
   info: {
     fontSize: 16,
     marginBottom: 5,
+  },
+  redeemNote: {
+    fontSize: 16,
+    fontWeight: "bold",
+    margin: 10,
+    textAlign: "center",
   },
   button: {
     width: "50%",
