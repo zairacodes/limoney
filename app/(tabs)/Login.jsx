@@ -1,13 +1,21 @@
 import React, { useContext, useState } from "react";
-import { View, Text, StyleSheet, Image, TextInput, Alert } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ImageBackground,
+  TextInput,
+  Alert,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from "react-native";
 import { Button } from "react-native-paper";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { UserContext } from "../context/UserContext"; //Pass data
+import { UserContext } from "../context/UserContext";
 import { router } from "expo-router";
 import { colours } from "../utils/colours";
 
 const login = () => {
-  const { setUserId } = useContext(UserContext); //Pass data
+  const { setUserId } = useContext(UserContext);
   const [isLogin, setIsLogin] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [selectedUserName, setSelectedUserName] = useState(null);
@@ -17,7 +25,7 @@ const login = () => {
   const handleConfirm = () => {
     const checkUserExist = users.find((user) => user.label === username);
     if (checkUserExist) {
-      setUserId(checkUserExist.value); //Pass data
+      setUserId(checkUserExist.value);
       router.push("/game");
     } else {
       Alert.alert("Invalid User");
@@ -32,10 +40,9 @@ const login = () => {
 
   const users = [
     { label: "QueenBarbara", value: "vSHbPyV82Y4As0rEVWJG" },
-    { label: "Lord Voldmort", value: "2VYQnKwksn9qH3wehHR5" },
+    { label: "Lordzin", value: "2VYQnKwksn9qH3wehHR5" },
     { label: "Zgmartli", value: "8kZbYgeYvmYu6cQuM9Yr" },
     { label: "Milady", value: "CgGw2rPZlpgf7eHz97nT" },
-    { label: "davidchung", value: "davidchunghc" },
     { label: "asdf", value: "davidchunghc" },
   ];
 
@@ -45,36 +52,41 @@ const login = () => {
       style={StyleSheet.absoluteFillObject}
       resizeMode="cover"
     >
-      <View style={styles.loginContainer}>
-        {!isLogin ? (
-          <View style={styles.innerContainer}>
-            <Text style={styles.loginText}>
-            Please Enter Your Username and Password
-            </Text>
-            <TextInput
-            style={styles.input}
-            onChangeText={onChangeUsername}
-            value={username}
-            placeholder="Username"
-          />
-          <TextInput
-            secureTextEntry={true}
-            style={styles.input}
-            onChangeText={onChangePwd}
-            value={pwd}
-            placeholder="Password"
-          />
-          <Button style={styles.button} onPress={handleConfirm}>
-            Confirm
-          </Button>
-          </View>
-        ) : (
-          <View>
-            <Text>Welcome! {selectedUserName} !</Text>
-            <Button title="Logout" onPress={handleLogout} />
-          </View>
-        )}
-      </View>
+      <TouchableWithoutFeedback
+        onPress={Keyboard.dismiss}
+        style={styles.keyboardContainer}
+      >
+        <View style={styles.loginContainer}>
+          {!isLogin ? (
+            <View style={styles.innerContainer}>
+              <Text style={styles.loginText}>
+                Please Enter Your Username and Password
+              </Text>
+              <TextInput
+                style={styles.input}
+                onChangeText={onChangeUsername}
+                value={username}
+                placeholder="Username"
+              />
+              <TextInput
+                secureTextEntry={true}
+                style={styles.input}
+                onChangeText={onChangePwd}
+                value={pwd}
+                placeholder="Password"
+              />
+              <Button style={styles.button} onPress={handleConfirm}>
+                Confirm
+              </Button>
+            </View>
+          ) : (
+            <View>
+              <Text>Welcome! {selectedUserName} !</Text>
+              <Button title="Logout" onPress={handleLogout} />
+            </View>
+          )}
+        </View>
+      </TouchableWithoutFeedback>
     </ImageBackground>
   );
 };
@@ -87,6 +99,9 @@ const styles = StyleSheet.create({
   },
   innerContainer: {
     width: "80%",
+  },
+  keyboardContainer: {
+    padding: "100%",
   },
   input: {
     height: 40,
