@@ -41,7 +41,7 @@ export const UserProvider = ({ children }) => {
   const { routes, index } = navigation.getState();
 
   const [fulfillRent, setFulfillRent] = useState(false);
-  const [fulfillUtitlies, setFulfillUtitlies] = useState(false);
+  const [fulfillUtitlies, setFulfillUtilities] = useState(false);
   const [fulfillTax, setFulfillTax] = useState(false);
 
   let currentRoute;
@@ -123,7 +123,7 @@ export const UserProvider = ({ children }) => {
       setIsThrottled(true);
       setTimeout(() => {
         setIsThrottled(false);
-      }, 10000);
+      }, 100000);
     } catch (error) {
       console.error("Failed to update user data in Firebase:", error);
     }
@@ -175,7 +175,7 @@ export const UserProvider = ({ children }) => {
         loading,
         setUserId,
         setFulfillRent,
-        setFulfillUtitlies,
+        setFulfillUtilities,
         setFulfillTax,
       }}
     >

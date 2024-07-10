@@ -101,8 +101,6 @@ export default function ExpensesInfo({
       }
       setFulfillRent(true);
       setPaidMonths(updatedPaidMonths);
-      setAsdfRent(true);
-
       setAccuRent(0);
       setTotalRent(2000);
     } else {

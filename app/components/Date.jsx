@@ -80,7 +80,7 @@ export default function DateComponent() {
               : currentYear,
         },
       }));
-    }, 1000);
+    }, 120000);
 
     return () => clearTimeout(timer);
   }, [currentDay, currentMonth, currentYear, maxDays]);
