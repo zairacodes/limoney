@@ -3,7 +3,7 @@ import * as React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { Button } from "react-native-paper";
 import { UserContext } from "../context/UserContext";
-import { ProgressBar, MD3Colors } from "react-native-paper";
+import { ProgressBar } from "react-native-paper";
 import Date from "./Date";
 import { colours } from "../utils/colours";
 import { router } from "expo-router";
@@ -19,7 +19,7 @@ export default function Header() {
       <ProgressBar
         style={styles.progressBar}
         progress={percentageToGoal}
-        color={MD3Colors.error50}
+        color={colours.green}
       />
       <Date />
       <Button style={styles.button} onPress={() => router.dismiss()}>
