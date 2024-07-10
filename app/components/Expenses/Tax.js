@@ -44,9 +44,11 @@ export default function Tax({ setTransactionHistory }) {
 
   return (
     <View style={styles.box}>
-      <Text style={styles.text}>Tax to Pay: {tax.toFixed(2)}</Text>
+      <View style={styles.taxContainer}>
+        <Text style={styles.text}>Tax to Pay: £{tax}</Text>
+      </View>
       <Button style={styles.button} onPress={payTax} disabled={tax === 0}>
-        PAY TAX
+        PAY
       </Button>
     </View>
   );
@@ -73,5 +75,10 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     borderWidth: 1,
     backgroundColor: colours.yellow,
+  },
+
+  taxContainer: {
+    alignItems: "center",
+    textAlign: "center",
   },
 });
