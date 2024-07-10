@@ -1,6 +1,6 @@
 import React from "react";
 import { Tabs } from "expo-router";
-import { FontAwesome6, MaterialIcons } from "@expo/vector-icons";
+import { FontAwesome6, MaterialIcons, Entypo } from "@expo/vector-icons";
 
 const TabLayout = () => {
   return (
@@ -8,9 +8,9 @@ const TabLayout = () => {
       <Tabs.Screen
         name="Operation"
         options={{
-          tabBarLabel: "Operation",
+          tabBarLabel: "Stand",
           tabBarIcon: ({ color }) => (
-            <FontAwesome6 name="kitchen-set" size={24} color={color} />
+            <Entypo name="shop" size={24} color={color} />
           ),
         }}
       />
