@@ -11,7 +11,8 @@ export default function ExpensesInfo({
   setUtilities,
   utilities,
 }) {
-  const { user, setUser } = useContext(UserContext);
+  const { user, setUser, setFulfillRent, setFulfillUtilities } =
+    useContext(UserContext);
   const [transactionHistory, setTransactionHistory] = useState([]);
   const [paidMonths, setPaidMonths] = useState([]);
   const [paidUtilitiesMonths, setPaidUtilitiesMonths] = useState([]);
@@ -67,6 +68,11 @@ export default function ExpensesInfo({
   }, [user.currentDate.month]);
 
   useEffect(() => {
+    if (!paidMonths.includes(user.currentDate.month))
+      setFulfillUtilities(false);
+  }, [user.currentDate.month, paidMonths]);
+
+  useEffect(() => {
     if (user.accountBalance <= 0) {
       Alert.alert(
         "Game Over",
@@ -93,7 +99,9 @@ export default function ExpensesInfo({
           updatedPaidMonths.push(months[i]);
         }
       }
+      setFulfillRent(true);
       setPaidMonths(updatedPaidMonths);
+      setAsdfRent(true);
 
       setAccuRent(0);
       setTotalRent(2000);
@@ -104,6 +112,7 @@ export default function ExpensesInfo({
       );
     }
   };
+
   const payUtilities = () => {
     if (user.accountBalance >= totalUtilities) {
       logTransaction("Utilities payment", totalUtilities);
@@ -120,7 +129,7 @@ export default function ExpensesInfo({
         }
       }
       setPaidUtilitiesMonths(updatedUtilitiesPaidMonths);
-
+      setFulfillUtilities(true);
       setAccuUtilities(0);
       setTotalUtilities(500);
     } else {
@@ -174,6 +183,7 @@ export default function ExpensesInfo({
       </View>
     );
   };
+
   return (
     <View>
       <View style={styles.box}>

@@ -5,8 +5,9 @@ import { colours } from "../../utils/colours";
 import { UserContext } from "../../context/UserContext";
 
 export default function Tax({ setTransactionHistory }) {
-  const { user, setUser } = useContext(UserContext);
+  const { user, setUser, setFulfillTax } = useContext(UserContext);
   const [tax, setTax] = useState(0);
+  // const [asdfTax, setAsdfTax] = useStated(false)
 
   const logTransaction = (description, amount) => {
     const newTransaction = {
@@ -21,7 +22,7 @@ export default function Tax({ setTransactionHistory }) {
     const calculateTax = () => {
       return 10 * 0.2;
     };
-
+    setFulfillTax(false);
     setTax(tax + calculateTax());
   }, [user.totalProfit]);
 
@@ -32,6 +33,7 @@ export default function Tax({ setTransactionHistory }) {
         ...prevUser,
         accountBalance: newAccountBalance,
       }));
+      setFulfillTax(true);
       setTax(0);
       logTransaction("Tax", tax);
     } else {

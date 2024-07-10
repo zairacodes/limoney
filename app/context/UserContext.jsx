@@ -6,13 +6,12 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import NetInfo from "@react-native-community/netinfo";
 import { router, useNavigation } from "expo-router";
 
-
-export const UserContext = createContext(null)
+export const UserContext = createContext(null);
 
 export const UserProvider = ({ children }) => {
   const initialState = {
-    username: 'Blalalala',
-    accountBalance: 2000,
+    username: "Blalalala",
+    accountBalance: 12345,
     totalProfit: 0,
     lemonCount: 0,
     sugarCount: 0,
@@ -21,7 +20,7 @@ export const UserProvider = ({ children }) => {
     daysPlayed: 0,
     currentDate: {
       day: 1,
-      month: 'January',
+      month: "January",
       year: 2025,
     },
     investmentDetails: {
@@ -30,7 +29,7 @@ export const UserProvider = ({ children }) => {
       interestEarned: 0,
       timeElapsed: 0,
     },
-  }
+  };
 
   const [user, setUser] = useState(initialState);
   const [userId, setUserId] = useState(null);
@@ -41,6 +40,10 @@ export const UserProvider = ({ children }) => {
   const navigation = useNavigation();
   const { routes, index } = navigation.getState();
 
+  const [fulfillRent, setFulfillRent] = useState(false);
+  const [fulfillUtitlies, setFulfillUtitlies] = useState(false);
+  const [fulfillTax, setFulfillTax] = useState(false);
+
   let currentRoute;
 
   if (index) {
@@ -49,9 +52,9 @@ export const UserProvider = ({ children }) => {
 
   const fetchDataFromStorage = async () => {
     try {
-      const jsonValue = await AsyncStorage.getItem('user')
+      const jsonValue = await AsyncStorage.getItem("user");
       if (jsonValue != null) {
-        const parsedData = JSON.parse(jsonValue)
+        const parsedData = JSON.parse(jsonValue);
         setUser((prevUser) => ({
           ...prevUser,
           ...parsedData,
@@ -63,20 +66,20 @@ export const UserProvider = ({ children }) => {
             ...prevUser.investmentDetails,
             ...parsedData.investmentDetails,
           },
-        }))
+        }));
       }
     } catch (e) {
-      console.error('Failed to load user data from storage', e)
+      console.error("Failed to load user data from storage", e);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const fetchDataFromFirebase = (userId) => {
-    if (!userId) return
-    const unsub = onSnapshot(doc(db, 'users', userId), (doc) => {
+    if (!userId) return;
+    const unsub = onSnapshot(doc(db, "users", userId), (doc) => {
       if (doc.exists()) {
-        const data = doc.data()
+        const data = doc.data();
         setUser((prevUser) => ({
           ...prevUser,
           ...data,
@@ -88,73 +91,75 @@ export const UserProvider = ({ children }) => {
             ...prevUser.investmentDetails,
             ...data.investmentDetails,
           },
-        }))
+        }));
       }
-      setLoading(false)
-      console.log('User data fetched from Firebase')
-    })
-    return unsub
-  }
+      setLoading(false);
+      console.log("User data fetched from Firebase");
+    });
+    return unsub;
+  };
 
   useEffect(() => {
     const unsubscribe = NetInfo.addEventListener((state) => {
-      setIsConnected(state.isConnected)
+      setIsConnected(state.isConnected);
       if (state.isConnected) {
-        const unsub = fetchDataFromFirebase(userId)
-        return () => unsub()
+        const unsub = fetchDataFromFirebase(userId);
+        return () => unsub();
       } else {
-        fetchDataFromStorage()
+        fetchDataFromStorage();
       }
-    })
-    return () => unsubscribe()
-  }, [userId])
+    });
+    return () => unsubscribe();
+  }, [userId]);
 
   const updateUserDataInFirebase = async (reason) => {
     if (!userId || isThrottled) {
-      return
+      return;
     }
-    const userRef = doc(db, 'users', userId)
+    const userRef = doc(db, "users", userId);
     try {
-      await updateDoc(userRef, user)
-      console.log(`User data updated in Firebase due to: ${reason}`)
-      setIsThrottled(true)
+      await updateDoc(userRef, user);
+      console.log(`User data updated in Firebase due to: ${reason}`);
+      setIsThrottled(true);
       setTimeout(() => {
-        setIsThrottled(false)
-      }, 10000)
+        setIsThrottled(false);
+      }, 10000);
     } catch (error) {
-      console.error('Failed to update user data in Firebase:', error)
+      console.error("Failed to update user data in Firebase:", error);
     }
-  }
-  
+  };
 
   useEffect(() => {
     if (!userId) {
-      return
+      return;
     }
 
-    updateUserDataInFirebase('user state change')
-  }, [user])
+    updateUserDataInFirebase("user state change");
+  }, [user]);
 
   useEffect(() => {
     const handleAppStateChange = (nextAppState) => {
-      console.log(`App state changed to: ${nextAppState}`)
-      if (nextAppState === 'background' || nextAppState === 'inactive') {
-        updateUserDataInFirebase(nextAppState)
+      console.log(`App state changed to: ${nextAppState}`);
+      if (nextAppState === "background" || nextAppState === "inactive") {
+        updateUserDataInFirebase(nextAppState);
       }
-    }
+    };
 
     const subscription = AppState.addEventListener(
-      'change',
+      "change",
       handleAppStateChange
-    )
+    );
 
     return () => {
-      subscription.remove()
-    }
-  }, [userId, user])
+      subscription.remove();
+    };
+  }, [userId, user]);
 
   if (
     user.accountBalance >= 100000 &&
+    fulfillRent === true &&
+    fulfillUtitlies === true &&
+    fulfillTax === true &&
     beenToWinner === false &&
     currentRoute !== "(tabs)/Winner"
   ) {
@@ -163,8 +168,18 @@ export const UserProvider = ({ children }) => {
   }
 
   return (
-    <UserContext.Provider value={{ user, setUser, loading, setUserId }}>
+    <UserContext.Provider
+      value={{
+        user,
+        setUser,
+        loading,
+        setUserId,
+        setFulfillRent,
+        setFulfillUtitlies,
+        setFulfillTax,
+      }}
+    >
       {children}
     </UserContext.Provider>
-  )
-}
+  );
+};
