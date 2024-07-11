@@ -14,8 +14,8 @@ export default function InfoText() {
         Limoney lemonade stand!
       </Text>
       <Text style={styles.body}>
-        Your aim is to earn £100,000 by selling consistently and making smart
-        investments.
+        You will be given £2000 to start with. Your aim is to earn £100,000 by
+        selling consistently and making smart investments.
       </Text>
       <Text style={styles.body}>Now let's break down the basics...</Text>
       <Text style={styles.subheading}>🍋 Stand 🍋</Text>
