@@ -1,4 +1,4 @@
-# Limoney
+# <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/javascript/javascript-original.svg" height="40" width="40" /> <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/react/react-original.svg" height="40" width="40" /> <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/firebase/firebase-original-wordmark.svg" height="40" width="40" /> Limoney
 
 Welcome to Limoney, the ultimate game app for young entrepreneurs aged 10 to 14 who are eager to learn about business and finance through a fun and interactive experience.
 
