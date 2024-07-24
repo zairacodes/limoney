@@ -6,6 +6,8 @@ Welcome to Limoney, the ultimate game app for young entrepreneurs aged 10 to 14 
 
 Limoney transforms the traditional lemonade stand into an engaging learning platform where users can manage inventory, make strategic investments and enhance their business operations. This app is designed to teach essential skills like budgeting and money management in a playful and educational way. We created Limoney because we believe these skills are crucial for children's development and are often overlooked in traditional education.
 
+![limoney](https://github.com/user-attachments/assets/8249685e-3ad6-4cdc-b12a-9aa7e812c188)
+
 ## Tech Stack
 
 - **React Native and Expo**: Cross-platform framework for developing iOS and Android apps, ensuring efficient UI design and development.
@@ -56,7 +58,7 @@ To run the project locally, follow these steps:
 - [David C.](https://www.linkedin.com/in/davidchunghc/)
 
 Feel free to reach out if you have any questions or feedback!  
-Also, don't forget to check out our Project Showcase [here](<!-- link here -->)!
+Also, don't forget to check out our Project Showcase [here](https://northcoders.com/project-phase/limoney)!
 
 ---
 
