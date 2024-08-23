@@ -6,17 +6,24 @@ Welcome to Limoney, the ultimate game app for young entrepreneurs aged 10 to 14 
 
 Limoney transforms the traditional lemonade stand into an engaging learning platform where users can manage inventory, make strategic investments and enhance their business operations. This app is designed to teach essential skills like budgeting and money management in a playful and educational way. We created Limoney because we believe these skills are crucial for children's development and are often overlooked in traditional education.
 
+Check out our Project Showcase [here](https://northcoders.com/project-phase/limoney)!
+
 ![limoney](https://github.com/user-attachments/assets/8249685e-3ad6-4cdc-b12a-9aa7e812c188)
+
+## Development Timeline
+
+- **Week 1**: brainstorming project ideas and conducting feasibility studies (including MVP design and spiking)
+- **Week 2**: core development and implementation
+- **Week 3**: refinement, testing, demo recording and project retrospective
+
+In just three weeks, we immersed ourselves in a new tech stack, including React Native and Firebase, rapidly gaining proficiency. Utilising Agile methodologies, such as regular stand-ups and sprint planning sessions, along with a Kanban board for task management, we ensured smooth progress and clear communication. While we had prior experience with GitHub, our teamwork allowed us to refine our skills in merging changes and managing branches effectively. This collective effort, combined with Agile practices, enhanced our abilities in conflict tracking and resolution, ultimately leading us to thrive in the collaborative environment.
 
 ## Tech Stack
 
-- **React Native and Expo**: Cross-platform framework for developing iOS and Android apps, ensuring efficient UI design and development.
-
-- **Firebase**: Back-end services including Firestore for real-time database management and secure user authentication.
-
-- **Context API**: Utilised within a UserProvider for effective state management across the app.
-
-- **Async Storage and NetInfo**: Integrated for handling offline data and monitoring network status, ensuring seamless user experience under varying connectivity conditions.
+- **React Native and Expo**: cross-platform framework for developing iOS and Android apps, ensuring efficient UI design and development
+- **Firebase**: back-end services including Firestore for real-time database management and secure user authentication
+- **Context API**: utilised within a UserProvider for effective state management across the app
+- **Async Storage and NetInfo**: integrated for handling offline data and monitoring network status, ensuring seamless user experience under varying connectivity conditions
 
 ## Getting Started
 
@@ -51,14 +58,9 @@ To run the project locally, follow these steps:
 
 ## Meet the Code Ninjas
 
-- [Joao P.](https://www.linkedin.com/in/jponte/)
-- [Luka E.](https://www.linkedin.com/in/luka-elizbarashvili-22b58826b/)
-- [Emma C.](https://www.linkedin.com/in/emma-jade-cliff/)
-- [Zaira N.](https://www.linkedin.com/in/zaira-n/)
-- [David C.](https://www.linkedin.com/in/davidchunghc/)
+[David C.](https://www.linkedin.com/in/davidchunghc/) | [Emma C.](https://www.linkedin.com/in/emma-jade-cliff/) | [Joao P.](https://www.linkedin.com/in/jponte/) | [Luka E.](https://www.linkedin.com/in/luka-elizbarashvili-22b58826b/) | [Zaira N.](https://www.linkedin.com/in/zaira-n/)
 
-Feel free to reach out if you have any questions or feedback!  
-Also, don't forget to check out our Project Showcase [here](https://northcoders.com/project-phase/limoney)!
+Feel free to reach out if you have any questions or feedback!
 
 ---
 
